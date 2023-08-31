@@ -67,15 +67,11 @@ export default {
 
       // Verifica se o usuário é cadastrado
       try {
-        const response = await axios.post("http://localhost:3000/sessions", {
-          email: this.user.email,
-          password: this.user.password,
-        });
+        const response = await axios.post("http://localhost:3000/sessions", this.user);
 
         if (response.status === 200) {
           // Salvar nome do usuário e token no localStorage
-          localStorage.setItem("username", response.data.username);
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", JSON.stringify(response.data));
 
           // Caso o login for bem-sucedido, o usuário é direcionado para o Dashboard
           this.$router.push("/dashboard");
