@@ -29,9 +29,9 @@
           >Entrar</v-btn
         >
         <!-- Palavra cadastre-se leva para página de cadastro (UserRegistration)-->
-        <v-text
+        <v-card-text
           >Não tem conta?
-          <router-link to="/cadastro">Cadastre-se</router-link></v-text
+          <router-link to="/cadastro">Cadastre-se</router-link></v-card-text
         >
         
         <!-- Exibe erro ao usuário em caso de erro -->

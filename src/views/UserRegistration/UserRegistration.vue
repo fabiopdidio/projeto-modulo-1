@@ -3,12 +3,11 @@
     <v-card-title class="text-center font-weight-bold mb-4"
       >Crie sua conta</v-card-title
     >
-
     <v-card-text>
       <!-- Campo para o nome com validação do vuetify -->
-      <v-form ref="form" @submit.prevent="handleSubmit">
+      <v-form ref="form" @submit.prevent="handleRegistration">
         <v-text-field
-          v-model="user.nome"
+          v-model="user.name"
           label="Nome completo"
           placeholder="Nome completo"
           :rules="[(v) => !!v || 'O nome é obrigatório']"
@@ -66,13 +65,10 @@
         ></v-select>
 
         <!-- Botão de cadastrar leva o usuário ao dashboard -->
-        <v-btn
-          type="submit"
-          color="blue"
-          class="mt-2 mb-4 ml-12"
-          @click="$router.push('/dashboard')"
+        <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-12"
           >Cadastrar</v-btn
         >
+
         <!-- Botão de voltar leva o usuário de volta à página de login -->
         <v-btn color="white" class="mt-2 mb-4 ml-4" @click="$router.push('/')"
           >Voltar</v-btn
@@ -101,7 +97,7 @@ export default {
     };
   },
   methods: {
-    async handleSubmit() {
+    async handleRegistration() {
       const { valid } = await this.$refs.form.validate();
       if (!valid) {
         return;
@@ -109,15 +105,17 @@ export default {
 
       try {
         const response = await axios.post("http://localhost:3000/users", {
-          name: this.user.nome,
+          name: this.user.name,
           email: this.user.email,
           password: this.user.password,
           type_plan: this.user.plan,
         });
 
         if (response.status === 201) {
+          // Salvar o nome do usuário no Local Storage
+          localStorage.setItem("name", this.user.name);
           alert("Usuário cadastrado com sucesso!");
-          this.$router.push("/dashboard");
+          this.$router.push("/");
         }
       } catch (error) {
         if (error.response) {
