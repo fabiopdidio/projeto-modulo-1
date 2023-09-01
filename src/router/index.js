@@ -5,6 +5,7 @@ import Dashboard from "../views/Dashboard/Dashboard.vue"
 import ExerciseManagement from "../views/ExerciseManagement/ExerciseManagement.vue"
 import StudentManagement from "../views/StudentManagement/StudentManagement.vue"
 import NewStudent from "../views/NewStudent/NewStudent.vue"
+import WorkoutRegistration from "../views/WorkoutRegistration/WorkoutRegistration.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: "/cadastro-novo-aluno",
       name: "cadastro-novo-alunos",
       component: NewStudent,
+    },
+    {
+      path: "/cadastro-de-treino",
+      name: "cadastro-de-treino",
+      component: WorkoutRegistration,
     },
   ],
 });
