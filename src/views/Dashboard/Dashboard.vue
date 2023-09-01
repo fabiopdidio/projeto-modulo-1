@@ -29,9 +29,13 @@
           <v-card-title
             >{{ dashboardInfo.amount_exercises }} Exercícios</v-card-title
           >
-          <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4"
-            >Adicionar</v-btn
+          <v-btn
+            color="blue"
+            class="mt-2 mb-4 ml-4"
+            @click="$router.push('/gerenciamento-de-exercicios')"
           >
+            Adicionar
+          </v-btn>
         </v-card>
       </v-col>
     </v-row>
