@@ -1,4 +1,6 @@
 <template>
+  <Header />
+
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="black">
     <v-card-title class="text-center font-weight-bold mb-4 mt-4"
       >Treino</v-card-title
@@ -76,9 +78,14 @@
 </template>
 
 <script>
+import Header from "../../components/Header.vue";
+
 import axios from "axios";
 
 export default {
+  components: {
+    Header,
+  },
   data() {
     return {
       user: {
@@ -111,7 +118,7 @@ export default {
           value: "sexta",
         },
         {
-          title: "Sabado",
+          title: "Sábado",
           value: "sabado",
         },
         {
@@ -123,26 +130,33 @@ export default {
       error: null,
     };
   },
-  async mounted() {
-    // Monta a pagina usando "mounted" e faz a requisição GET para buscar dados.
-    try {
-      const response = await axios.get("/exercises");
-      this.exercises = response.data;
-    } catch (error) {
-      this.error = "Erro ao buscar exercícios.";
-    }
-  },
+
   methods: {
     async handleRegistration() {
+      this.error = null;
       try {
         const response = await axios.post(
           "http://localhost:3000/training",
           this.user
         );
       } catch (error) {
-        this.error = "Erro ao cadastrar treino.";
+        this.error =
+          "Erro ao cadastrar treino. Por favor, verifique os campos e tente novamente.";
       }
     },
+  },
+
+  mounted() {
+    this.error = null;
+    axios
+      .get("/exercises")
+      .then((response) => {
+        this.exercises = response.data;
+      })
+      .catch((error) => {
+        this.error =
+          "Erro ao carregar exercícios. Por favor, tente novamente mais tarde.";
+      });
   },
 };
 </script>
