@@ -2,8 +2,8 @@
   <v-card class="mx-auto mt-10" max-width="400" elevation="10" color="grey">
     <v-card-title class="text-center font-weight-bold mb-4">Login</v-card-title>
     <v-card-text>
+      
       <v-form ref="form" @submit.prevent="handleSubmit">
-
         <!-- Campo para o email com validação do vuetify -->
         <v-text-field
           v-model="user.email"
@@ -33,7 +33,7 @@
           >Não tem conta?
           <router-link to="/cadastro">Cadastre-se</router-link></v-card-text
         >
-        
+
         <!-- Exibe erro ao usuário em caso de erro -->
         <div v-if="error" class="error-message">{{ error }}</div>
       </v-form>
@@ -51,41 +51,34 @@ export default {
         email: "",
         password: "",
       },
-      error: "",
     };
   },
   methods: {
-    // Transforma a ação em assíncrona
     async handleSubmit() {
       const { valid } = await this.$refs.form.validate();
 
-      // Define mensagem em caso dos campos não serem preenchidos
       if (!valid) {
-        alert("Preencha todos os campos!");
+        alert("Preencha todos os dados!");
         return;
       }
 
-      // Verifica se o usuário é cadastrado
       try {
-        const response = await axios.post("http://localhost:3000/sessions", this.user);
+        const result = await axios.post(
+          "http://localhost:3000/sessions",
+          this.user
+        );
 
-        if (response.status === 200) {
-          // Salvar nome do usuário e token no localStorage
-          localStorage.setItem("token", JSON.stringify(response.data));
-
-          // Caso o login for bem-sucedido, o usuário é direcionado para o Dashboard
+        if (result.status == 200) {
+          debugger;
+          localStorage.setItem("user-info", JSON.stringify(result.data));
           this.$router.push("/dashboard");
         }
-      } catch (error) {
-        // Exibe mensagem de erro na tela
-        if (error.response) {
-          this.error = error.response.data.message;
-        } else {
-          console.error("Erro ao fazer requisição:", error);
-        }
-      }
 
-      this.$refs.form.reset();
+        console.log(result);
+      } catch (error) {
+        console.log(error.response.data.error);
+        alert("Usuário não cadastrado!");
+      }
     },
   },
 };
