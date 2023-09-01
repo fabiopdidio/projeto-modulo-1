@@ -3,6 +3,8 @@ import LoginPage from "../views/LoginPage/LoginPage.vue";
 import UserRegistration from "../views/UserRegistration/UserRegistration.vue"
 import Dashboard from "../views/Dashboard/Dashboard.vue"
 import ExerciseManagement from "../views/ExerciseManagement/ExerciseManagement.vue"
+import StudentManagement from "../views/StudentManagement/StudentManagement.vue"
+import NewStudent from "../views/NewStudent/NewStudent.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +28,16 @@ const router = createRouter({
       path: "/gerenciamento-de-exercicios",
       name: "gerenciamento-de-exercicios",
       component: ExerciseManagement,
+    },
+    {
+      path: "/gerenciamento-de-alunos",
+      name: "gerenciamento-de-alunos",
+      component: StudentManagement,
+    },
+    {
+      path: "/cadastro-novo-aluno",
+      name: "cadastro-novo-alunos",
+      component: NewStudent,
     },
   ],
 });
