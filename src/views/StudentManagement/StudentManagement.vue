@@ -1,4 +1,6 @@
 <template>
+  <Header />
+
   <v-app>
     <v-container>
       <h1>Alunos</h1>
@@ -34,8 +36,13 @@
 </template>
 
 <script>
+import Header from "../../components/Header.vue";
+
 import axios from "axios";
 export default {
+  components: {
+    Header,
+  },
   data() {
     return {
       nomeBusca: "",

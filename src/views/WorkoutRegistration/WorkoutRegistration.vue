@@ -1,4 +1,6 @@
 <template>
+  <Header />
+
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="black">
     <v-card-title class="text-center font-weight-bold mb-4 mt-4"
       >Treino</v-card-title
@@ -76,9 +78,14 @@
 </template>
 
 <script>
+import Header from "../../components/Header.vue";
+
 import axios from "axios";
 
 export default {
+  components: {
+    Header,
+  },
   data() {
     return {
       user: {
