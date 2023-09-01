@@ -13,7 +13,11 @@
           <v-card-title
             >{{ dashboardInfo.amount_students }} Alunos</v-card-title
           >
-          <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4"
+          <v-btn
+            type="submit"
+            color="blue"
+            class="mt-2 mb-4 ml-4"
+            @click="$router.push('/cadastro-novo-aluno')"
             >Adicionar</v-btn
           >
         </v-card>
