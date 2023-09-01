@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto mt-10" max-width="400" elevation="10" color="grey">
-    <v-card-title class="text-center font-weight-bold mb-4">Login</v-card-title>
+  <v-card class="mx-auto mt-10" max-width="400" elevation="10" color="black">
+    <v-card-title class="text-center font-weight-bold mb-4 mt-8">Login</v-card-title>
     <v-card-text>
       <v-form ref="form" @submit.prevent="handleSubmit">
 
@@ -29,7 +29,7 @@
           >Entrar</v-btn
         >
         <!-- Palavra cadastre-se leva para página de cadastro (UserRegistration)-->
-        <v-card-text
+        <v-card-text class="mt-2 mb-4"
           >Não tem conta?
           <router-link to="/cadastro">Cadastre-se</router-link></v-card-text
         >
