@@ -57,6 +57,15 @@ export default {
     };
   },
 
+  mounted() {
+    axios
+      .get("http://localhost:3000/exercises")
+      .then((res) => (this.dashboardInfo = res.data))
+      .catch((error) => console.log(error));
+
+    this.userInfo = JSON.parse(localStorage.getItem("user-info")) || null;
+  },
+
   methods: {
     cadastrarExercicio() {
       if (this.novoExercicio.trim() !== "") {
@@ -73,3 +82,5 @@ export default {
   },
 };
 </script>
+
+<style></style>
