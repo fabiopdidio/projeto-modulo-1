@@ -1,7 +1,8 @@
 <template>
-  <v-card class="mx-auto mt-10" max-width="400" elevation="10" color="black">
-    <v-card-title class="text-center font-weight-bold mb-4 mt-8">Login</v-card-title>
-    <v-card-text>
+  <div class="d-flex justify-center align-center" style="height: 100vh;">
+    <v-card style="width: 400px;" elevation="12" color="white">
+      <v-card-title class="text-center font-weight-bold mb-4 mt-8">Login</v-card-title>
+      <v-card-text>
       
       <v-form ref="form" @submit.prevent="handleSubmit">
         <!-- Campo para o email com validação do vuetify -->
@@ -25,11 +26,11 @@
         ></v-text-field>
 
         <!-- Botão do tipo submit para envio do formulário -->
-        <v-btn type="submit" block color="white" class="mt-2 mb-4"
+        <v-btn type="submit" block color="blue" class="mt-2 mb-4 pa-5"
           >Entrar</v-btn
         >
         <!-- Palavra cadastre-se leva para página de cadastro (UserRegistration)-->
-        <v-card-text class="mt-2 mb-4"
+        <v-card-text class="mt-2 mb-4 text-h8 d-flex justify-center align-center"
           >Não tem conta?
           <router-link to="/cadastro">Cadastre-se</router-link></v-card-text
         >
@@ -38,7 +39,8 @@
         <div v-if="error" class="error-message">{{ error }}</div>
       </v-form>
     </v-card-text>
-  </v-card>
+    </v-card>
+  </div>
 </template>
 
 <script>
