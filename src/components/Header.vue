@@ -29,7 +29,8 @@ export default {
 
 .brand {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: bolder;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-right: auto;
   margin-left: 20px;
 }
@@ -39,6 +40,8 @@ export default {
   color: white;
   margin-left: 10px;
   margin-right: 20px;
+  font-weight: bold;
+
 }
 
 </style>
