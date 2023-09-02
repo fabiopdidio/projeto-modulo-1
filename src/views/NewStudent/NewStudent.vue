@@ -1,5 +1,6 @@
 <template>
   <Header />
+
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
     <v-card-title class="text-center font-weight-bold mb-4 mt-4"
       >Novo aluno</v-card-title
@@ -20,7 +21,7 @@
             ></v-text-field>
           </v-col>
 
-          <!-- Campo para o email válido opcional -->
+          <!-- Campo para o email válido e opcional -->
           <v-col cols="12" sm="6">
             <v-text-field
               v-model="user.email"
@@ -105,8 +106,8 @@
         <v-row>
           <v-col cols="12" sm="4" md="4">
             <v-text-field
-              v-model="user.province"
-              label="Estado"
+              v-model="user.neighborhood"
+              label="Bairro"
               type="text"
               variant="outlined"
             ></v-text-field>
@@ -121,18 +122,22 @@
           </v-col>
           <v-col cols="12" sm="4" md="4">
             <v-text-field
-              v-model="user.neighborhood"
-              label="Bairro"
+              v-model="user.province"
+              label="Estado"
               type="text"
               variant="outlined"
             ></v-text-field>
           </v-col>
         </v-row>
 
-        <!-- Botão de cadastrar levar o usuário ao dashboard -->
+        <!-- Botão de cadastrar -->
         <v-btn type="submit" color="blue" class="mt-2 mb-4 mx-auto"
           >Cadastrar</v-btn
         >
+
+        <router-link to="/dashboard">
+          <v-btn color="grey" class="mt-2 mb-4 ml-4">Voltar</v-btn>
+        </router-link>
 
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
@@ -183,7 +188,7 @@ export default {
           const response = await axios.get(
             `https://viacep.com.br/ws/${this.user.cep}/json/`
           );
-          this.user.street = response.data.logradouro || ""; 
+          this.user.street = response.data.logradouro || "";
           this.user.neighborhood = response.data.bairro;
           this.user.city = response.data.localidade;
           this.user.province = response.data.uf;
@@ -195,7 +200,7 @@ export default {
 
     async handleRegistration() {
       if (!this.user.name || !this.user.contact || !this.user.cep) {
-        this.error = "Por favor, preencha todos os campos obrigatórios.";
+        this.error = "Preencha todos os campos obrigatórios.";
         this.success = "";
         return;
       }
