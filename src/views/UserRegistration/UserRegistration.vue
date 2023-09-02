@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto mt-10" max-width="400" elevation="10" color="black">
-    <v-card-title class="text-center font-weight-bold mb-4"
+  <v-card class="mx-auto mt-16" max-width="500" elevation="10" color="white">
+    <v-card-title class="text-center font-weight-bold ma-8"
       >Crie sua conta</v-card-title
     >
     <v-card-text>
@@ -13,6 +13,7 @@
           :rules="[(v) => !!v || 'O nome é obrigatório']"
           type="text"
           variant="outlined"
+          class="mr-8 ml-8"
         ></v-text-field>
 
         <!-- Campo para o email com validação do vuetify -->
@@ -26,6 +27,7 @@
           ]"
           type="email"
           variant="outlined"
+          class="mr-8 ml-8"
         ></v-text-field>
 
         <!-- Campo para a senha com validação do vuetify -->
@@ -41,6 +43,7 @@
           ]"
           type="password"
           variant="outlined"
+          class="mr-8 ml-8"
         ></v-text-field>
 
         <!-- Campo para confirmação de senha com validação do vuetify -->
@@ -54,6 +57,7 @@
           ]"
           type="password"
           variant="outlined"
+          class="mr-8 ml-8"
         ></v-text-field>
 
         <!-- Campo para escolha do plano com o plano bronze como padrão e com validação do vuetify -->
@@ -62,17 +66,18 @@
           :items="['Bronze', 'Prata', 'Ouro']"
           label="Tipo de plano"
           variant="outlined"
+          class="mr-8 ml-8"
         ></v-select>
 
         <!-- Botão de cadastrar leva o usuário ao dashboard -->
-        <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-12"
-          >Cadastrar</v-btn
-        >
+        <div class="d-flex justify-center">
+          <v-btn type="submit" color="blue" class="mt-2 mb-4 mr-4">Cadastrar</v-btn>
 
-        <!-- Botão de voltar leva o usuário de volta à página de login -->
-        <v-btn color="white" class="mt-2 mb-4 ml-4" @click="$router.push('/')"
-          >Voltar</v-btn
-        >
+          <!-- Botão de voltar leva o usuário de volta à página de login -->
+          <v-btn color="grey" class="mt-2 mb-4" @click="$router.push('/')"
+            >Voltar</v-btn
+          >
+        </div>
 
         <div v-if="error" class="error-message">{{ error }}</div>
       </v-form>
@@ -115,7 +120,7 @@ export default {
           // Salvar o nome do usuário no Local Storage
           localStorage.setItem("name", this.user.name);
           alert("Usuário cadastrado com sucesso!");
-          this.$router.push("/");
+          this.$router.push("/"); // Leva usuario para a pagina de login
         }
       } catch (error) {
         if (error.response) {
