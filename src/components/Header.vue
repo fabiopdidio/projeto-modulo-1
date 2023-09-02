@@ -1,41 +1,47 @@
 <template>
   <header>
-    <v-card
-    color="grey-lighten-4"
-    flat
-    height="200px"
-    rounded="0"
-  >
-    <v-toolbar
-      prominent
-      extended
-    >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-      <v-toolbar-title>TrainSys</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-    </v-toolbar>
-  </v-card>
+    <div class="app-bar">
+    <div class="brand">TrainSys</div>
+    <router-link to="/dashboard">Home</router-link>
+    <router-link to="/gerenciamento-de-alunos">Alunos</router-link>
+    <router-link to="/gerenciamento-de-exercicios">Exercícios</router-link>
+    <a @click="sair">Sair</a>
+  </div>
   </header>
 </template>
 
 <script>
+
 export default {
   name: "Header",
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.app-bar {
+  background-color: #2196F3;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-size: 24px;
+  font-weight: bolder;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-right: auto;
+  margin-left: 20px;
+}
+
+.app-bar a {
+  text-decoration: none;
+  color: white;
+  margin-left: 10px;
+  margin-right: 20px;
+  font-weight: bold;
+
+}
+
+</style>
