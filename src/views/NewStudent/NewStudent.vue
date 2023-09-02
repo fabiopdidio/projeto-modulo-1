@@ -1,7 +1,8 @@
 <template>
-  <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="black">
+  <Header/>
+  <v-card class="mx-auto mt-16 " max-width="800" elevation="10" color="white">
     <v-card-title class="text-center font-weight-bold mb-4 mt-4"
-      >Alunos</v-card-title
+      >Novo aluno</v-card-title
     >
     <v-card-text>
       <!-- Campo para o nome completo obrigatorio -->
@@ -113,7 +114,7 @@
       </v-row>
 
       <!-- Botão de cadastrar leva o usuário ao dashboard -->
-      <v-btn type="submit" color="blue" class="mt-2 mb-4">Cadastrar</v-btn>
+      <v-btn type="submit" color="blue" class="mt-2 mb-4 mx-auto">Cadastrar</v-btn>
 
       <div v-if="error" class="error-message">{{ error }}</div>
     </v-card-text>
@@ -122,8 +123,13 @@
 
 <script>
 import axios from "axios";
+import Header from "../../components/Header.vue";
+
 
 export default {
+  components: {
+    Header,
+  },
   data() {
     return {
       user: {
