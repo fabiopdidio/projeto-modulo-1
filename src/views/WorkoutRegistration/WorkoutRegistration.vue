@@ -1,8 +1,14 @@
 <template>
   <Header />
 
-  <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="black">
-    <v-card-title class="text-center font-weight-bold mb-4 mt-4"
+  <v-card
+    class="mx-auto mt-16"
+    max-width="800"
+    elevation="10"
+    color="white
+  "
+  >
+    <v-card-title class="text-center font-weight-bold mb-4 mt-6"
       >Treino</v-card-title
     >
     <v-card-text>
@@ -15,7 +21,7 @@
           item-text="name"
           item-value="id"
           :rules="[(v) => !!v || 'Selecione um exercício']"
-          outlined
+          variant="outlined"
         ></v-select>
 
         <!-- Campo para numero de repetições, carga e tempo de pausa -->
@@ -30,6 +36,7 @@
             ]"
             type="number"
             variant="outlined"
+            class="mr-2"
           ></v-text-field>
 
           <v-text-field
@@ -39,6 +46,7 @@
             :rules="[(v) => !!v || 'A carga é obrigatória']"
             type="number"
             variant="outlined"
+            class="mr-2"
           ></v-text-field>
 
           <v-text-field
@@ -57,7 +65,7 @@
           label="Dia da Semana"
           :items="diasLista"
           :rules="[(v) => !!v || 'Selecione um dia da semana']"
-          outlined
+          variant="outlined"
         ></v-select>
 
         <!-- Campo de observações do treino -->
@@ -65,11 +73,13 @@
           v-model="user.observations"
           label="Observações do Treino"
           placeholder="Observações do Treino"
-          outlined
+          variant="outlined"
         ></v-textarea>
 
         <!-- Botão de cadastrar -->
         <v-btn type="submit" color="blue" class="mt-2 mb-4">Cadastrar</v-btn>
+        <v-btn type="submit" color="grey" class="mt-2 mb-4 ml-4">Cancelar</v-btn>
+
       </v-form>
 
       <div v-if="error" class="error-message">{{ error }}</div>
@@ -91,7 +101,7 @@ export default {
       user: {
         student_id: 0,
         exercise_id: "",
-        repetitions: 1,
+        repetitions: "",
         weight: "",
         break_time: "",
         observations: "",

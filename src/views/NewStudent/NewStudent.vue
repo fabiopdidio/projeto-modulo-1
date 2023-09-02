@@ -1,122 +1,142 @@
 <template>
-  <Header/>
-  <v-card class="mx-auto mt-16 " max-width="800" elevation="10" color="white">
+  <Header />
+  <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
     <v-card-title class="text-center font-weight-bold mb-4 mt-4"
       >Novo aluno</v-card-title
     >
+
     <v-card-text>
-      <!-- Campo para o nome completo obrigatorio -->
-      <v-row>
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.name"
-            label="Nome completo"
-            placeholder="Nome completo"
-            :rules="[(v) => !!v || 'O nome é obrigatório']"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <!-- Campo para o email valido opcional -->
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.email"
-            label="Email"
-            placeholder="Email"
-            :rules="[(v) => /.+@.+\..+/.test(v) || 'Email inválido']"
-            type="email"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+      <v-form ref="form" @submit.prevent="handleRegistration">
+        <!-- Campo para o nome completo obrigatório -->
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="user.name"
+              label="Nome completo"
+              placeholder="Nome completo"
+              :rules="[(v) => !!v || 'O nome é obrigatório']"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
 
-      <!-- Campo para o telefone obrigatorio -->
-      <v-row>
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.phone"
-            label="Contato"
-            placeholder="Contato"
-            :rules="[(v) => !!v || 'O telefone é obrigatório']"
-            type="phone"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <!-- Campo para o telefone obrigatorio -->
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.birthdate"
-            label="Data de nascimento"
-            placeholder="Data de nascimento"
-            type="date"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+          <!-- Campo para o email válido opcional -->
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="user.email"
+              label="Email"
+              placeholder="Email"
+              :rules="[(v) => !v || /.+@.+\..+/.test(v) || 'Email inválido']"
+              type="email"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-      <!-- Campos para CEP obrigatorio com verificacao na API do viacep -->
-      <v-row>
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.cep"
-            label="CEP"
-            placeholder="CEP"
-            :rules="[(v) => /^[0-9]{8}$/.test(v) || 'CEP inválido']"
-            @input="buscarEndereco"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            v-model="endereco.logradouro"
-            label="Logradouro"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+        <!-- Campo para o contato obrigatório -->
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="user.contact"
+              label="Contato"
+              placeholder="Contato"
+              :rules="[(v) => !!v || 'O contato é obrigatório']"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
 
-      <!-- Campos para estado, bairro, cidade obrigatorios e complemento opcional -->
-      <v-row>
-        <v-col cols="3">
-          <v-text-field
-            v-model="endereco.estado"
-            label="Estado"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3">
-          <v-text-field
-            v-model="endereco.bairro"
-            label="Bairro"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3">
-          <v-text-field
-            v-model="endereco.cidade"
-            label="Cidade"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3">
-          <v-text-field
-            v-model="endereco.complemento"
-            label="Complemento"
-            type="text"
-            variant="outlined"
-          ></v-text-field>
-        </v-col>
-      </v-row>
+          <!-- Campo para a data de nascimento opcional -->
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="user.birth"
+              label="Data de nascimento"
+              placeholder="Data de nascimento"
+              :rules="[(v) => !v || v <= getCurrentDate() || 'Data inválida']"
+              type="date"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
-      <!-- Botão de cadastrar leva o usuário ao dashboard -->
-      <v-btn type="submit" color="blue" class="mt-2 mb-4 mx-auto">Cadastrar</v-btn>
+        <!-- Campos para o endereço com preenchimento automatico apos busca na API do viaCEP-->
+        <v-row>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="user.cep"
+              label="CEP"
+              placeholder="CEP"
+              :rules="[(v) => !!v || 'O CEP é obrigatório']"
+              @blur="buscarEndereco"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
 
-      <div v-if="error" class="error-message">{{ error }}</div>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="user.street"
+              label="Logradouro"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12" sm="6" md="6">
+            <v-text-field
+              v-model="user.number"
+              label="Número"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6" md="6">
+            <v-text-field
+              v-model="user.complement"
+              label="Complemento"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12" sm="4" md="4">
+            <v-text-field
+              v-model="user.province"
+              label="Estado"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="4" md="4">
+            <v-text-field
+              v-model="user.city"
+              label="Cidade"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="4" md="4">
+            <v-text-field
+              v-model="user.neighborhood"
+              label="Bairro"
+              type="text"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <!-- Botão de cadastrar levar o usuário ao dashboard -->
+        <v-btn type="submit" color="blue" class="mt-2 mb-4 mx-auto"
+          >Cadastrar</v-btn
+        >
+
+        <div v-if="error" class="error-message">{{ error }}</div>
+        <div v-if="success" class="success-message">{{ success }}</div>
+      </v-form>
     </v-card-text>
   </v-card>
 </template>
@@ -125,7 +145,6 @@
 import axios from "axios";
 import Header from "../../components/Header.vue";
 
-
 export default {
   components: {
     Header,
@@ -133,40 +152,78 @@ export default {
   data() {
     return {
       user: {
-        nome: "",
+        name: "",
         email: "",
+        contact: "",
+        birth: "",
         cep: "",
+        street: "",
+        number: "",
+        neighborhood: "",
+        city: "",
+        province: "",
+        complement: "",
       },
       endereco: {
         logradouro: "",
-        estado: "",
-        bairro: "",
-        cidade: "",
-        complemento: "",
       },
       error: "",
+      success: "",
     };
   },
   methods: {
-    async handleRegistration() {
-      try {
-        this.user.endereco = this.endereco;
-      } catch (error) {}
+    getCurrentDate() {
+      const currentDate = new Date();
+      return currentDate.toISOString().split("T")[0];
     },
-    buscarEndereco() {
+
+    async buscarEndereco() {
       if (/^[0-9]{8}$/.test(this.user.cep)) {
-        axios
-          .get(`https://viacep.com.br/ws/${this.user.cep}/json/`) // Busca na API do viaCEP
-          .then((res) => {
-            this.endereco = {
-              logradouro: res.data.logradouro,
-              estado: res.data.uf,
-              bairro: res.data.bairro,
-              cidade: res.data.localidade,
-              complemento: res.data.complemento,
-            };
-          }) // Retorna os dados do viaCEP
-          .catch((error) => console.log(error));
+        try {
+          const response = await axios.get(
+            `https://viacep.com.br/ws/${this.user.cep}/json/`
+          );
+          this.user.street = response.data.logradouro || ""; 
+          this.user.neighborhood = response.data.bairro;
+          this.user.city = response.data.localidade;
+          this.user.province = response.data.uf;
+        } catch (error) {
+          this.error = "Falha ao buscar endereço.";
+        }
+      }
+    },
+
+    async handleRegistration() {
+      if (!this.user.name || !this.user.contact || !this.user.cep) {
+        this.error = "Por favor, preencha todos os campos obrigatórios.";
+        this.success = "";
+        return;
+      }
+
+      const isValid = await this.$refs.form.validate();
+
+      if (isValid) {
+        try {
+          const response = await axios.post("http://localhost:3000/students", {
+            name: this.user.name,
+            email: this.user.email,
+            contact: this.user.contact,
+            date_birth: this.user.birth,
+            cep: this.user.cep,
+            street: this.user.street,
+            number: this.user.number,
+            neighborhood: this.user.neighborhood,
+            city: this.user.city,
+            province: this.user.province,
+            complement: this.user.complement,
+          });
+
+          this.success = "Aluno cadastrado com sucesso!";
+          this.error = "";
+        } catch (error) {
+          this.error = "Falha ao concluir cadastro de aluno.";
+          this.success = "";
+        }
       }
     },
   },
@@ -176,6 +233,11 @@ export default {
 <style>
 .error-message {
   color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
   margin-top: 10px;
 }
 </style>
