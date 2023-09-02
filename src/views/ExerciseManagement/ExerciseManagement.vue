@@ -1,27 +1,28 @@
 <template>
   <Header />
 
-  <v-app>
+  <v-card class="mx-auto mt-16" max-width="800" elevation="10" color="white">
     <v-container>
-      <h1>Exercícios</h1>
+      <h1 class="text-center mt-8">Exercícios</h1>
 
-      <!-- Formulario para cadastro de exercicio -->
-      <v-form @submit.prevent="cadastrarExercicio" ref="form">
-        <v-row>
-          <v-col cols="6" class="mt-6">
-            <v-text-field
-              v-model="novoExercicio"
-              variant="outlined"
-              label="Digite o nome do Exercício"
-              required
-              :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
-            ></v-text-field>
-          </v-col>
+      <!-- Formulário para cadastro de exercício -->
+      <v-form ref="form" @submit.prevent="handleRegistration">
+        <v-row class="text-center">
+          <v-text-field
+            v-model="novoExercicio"
+            label="Digite o nome do Exercício"
+            placeholder="Digite o nome do Exercício"
+            :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
+            type="text"
+            variant="outlined"
+            class="mt-12 ml-12"
+            required
+          ></v-text-field>
 
-          <!-- Botao para realizar o cadastro -->
-          <v-col>
-            <v-btn type="submit" color="blue" class="mt-8">Cadastrar</v-btn>
-          </v-col>
+          <!-- Botão para realizar o cadastro -->
+          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6"
+            >Cadastrar</v-btn
+          >
         </v-row>
       </v-form>
 
@@ -30,19 +31,26 @@
         Exercício cadastrado com sucesso!
       </v-snackbar>
 
-      <!-- Lista de exercícios adicionados -->
+      <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
         <v-list-item v-for="(exercicio, index) in exercicios" :key="index">
-          <v-list-item-title>{{ exercicio }}</v-list-item-title>
+          <v-list-item-title class="ml-8">{{
+            exercicio.description
+          }}</v-list-item-title>
         </v-list-item>
       </v-list>
+
+      <!-- Botão para voltar ao dashboard -->
+      <router-link to="/dashboard">
+        <v-btn color="grey" class="mt-2 mb-4 ml-10">Voltar</v-btn>
+      </router-link>
+
     </v-container>
-  </v-app>
+  </v-card>
 </template>
 
 <script>
 import Header from "../../components/Header.vue";
-
 import axios from "axios";
 
 export default {
@@ -58,25 +66,38 @@ export default {
   },
 
   mounted() {
-    axios
-      .get("http://localhost:3000/exercises")
-      .then((res) => (this.dashboardInfo = res.data))
-      .catch((error) => console.log(error));
-
-    this.userInfo = JSON.parse(localStorage.getItem("user-info")) || null;
+    this.fetchExercicios(); 
   },
 
   methods: {
-    cadastrarExercicio() {
-      if (this.novoExercicio.trim() !== "") {
-        this.exercicios.push(this.novoExercicio);
-        this.novoExercicio = "";
-        this.$refs.form.resetValidation();
-        this.exercicioCadastrado = true;
+    fetchExercicios() {
+      axios
+        .get("http://localhost:3000/exercises")
+        .then((res) => {
+          this.exercicios = res.data;
+        })
+        .catch((error) => console.log(error));
+    },
 
-        setTimeout(() => {
-          this.exercicioCadastrado = false;
-        }, 3000);
+    handleRegistration() {
+      if (this.novoExercicio.trim() !== "") {
+        axios
+          .post("http://localhost:3000/exercises", {
+            description: this.novoExercicio,
+          })
+          .then((res) => {
+            this.exercicios.push(res.data);
+            this.novoExercicio = "";
+            this.$refs.form.resetValidation();
+            this.exercicioCadastrado = true;
+
+            setTimeout(() => {
+              this.exercicioCadastrado = false;
+
+              window.location.reload();
+            }, 3000);
+          })
+          .catch((error) => console.log(error));
       }
     },
   },
