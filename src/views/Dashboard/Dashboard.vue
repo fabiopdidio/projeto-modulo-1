@@ -23,6 +23,13 @@
             @click="$router.push('/cadastro-novo-aluno')"
             >Adicionar</v-btn
           >
+          <v-btn
+            type="submit"
+            color="grey"
+            class="mt-2 mb-8 ml-8"
+            @click="$router.push('/gerenciamento-de-alunos')"
+            >Gerenciar</v-btn
+          >
         </v-card>
       </v-col>
 
