@@ -1,9 +1,17 @@
 <template>
   <Header />
 
-  <v-card class="mx-auto mt-16" max-width="800" elevation="10" color="white">
+  <!-- Configuracao do card -->
+  <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
+    <!-- Botão para voltar ao dashboard -->
+    <router-link to="/dashboard">
+      <v-btn color="grey" class="mt-8 mb-4 ml-10" @click="voltar">
+        <v-icon left>mdi-arrow-left</v-icon>
+      </v-btn>
+    </router-link>
+
     <v-container>
-      <h1 class="text-center mt-8">Exercícios</h1>
+      <h1 class="text-center">Exercícios</h1>
 
       <!-- Formulário para cadastro de exercício -->
       <v-form ref="form" @submit.prevent="handleRegistration">
@@ -12,7 +20,7 @@
             v-model="novoExercicio"
             label="Digite o nome do Exercício"
             placeholder="Digite o nome do Exercício"
-            :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
+            :rules="[(v) => !!v]"
             type="text"
             variant="outlined"
             class="mt-12 ml-12"
@@ -26,10 +34,20 @@
         </v-row>
       </v-form>
 
-      <!-- Snackbar para exibir a mensagem de cadastrado com sucesso -->
-      <v-snackbar v-model="exercicioCadastrado" color="success" top>
+      <!-- alert para exibir a mensagem de cadastrado com sucesso -->
+      <v-alert
+        v-model="exercicioCadastrado"
+        color="success"
+        icon="$success"
+        top
+      >
         Exercício cadastrado com sucesso!
-      </v-snackbar>
+      </v-alert>
+
+      <!-- alert para exibir a mensagem de campo vazio ou erro -->
+      <v-alert v-model="campoVazio" color="error" icon="$error" top>
+        Digite o nome do exercício!
+      </v-alert>
 
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
@@ -39,12 +57,6 @@
           }}</v-list-item-title>
         </v-list-item>
       </v-list>
-
-      <!-- Botão para voltar ao dashboard -->
-      <router-link to="/dashboard">
-        <v-btn color="grey" class="mt-2 mb-4 ml-10">Voltar</v-btn>
-      </router-link>
-
     </v-container>
   </v-card>
 </template>
@@ -62,11 +74,12 @@ export default {
       novoExercicio: "",
       exercicios: [],
       exercicioCadastrado: false,
+      campoVazio: false,
     };
   },
 
   mounted() {
-    this.fetchExercicios(); 
+    this.fetchExercicios();
   },
 
   methods: {
@@ -90,14 +103,22 @@ export default {
             this.novoExercicio = "";
             this.$refs.form.resetValidation();
             this.exercicioCadastrado = true;
+            this.campoVazio = false;
 
             setTimeout(() => {
               this.exercicioCadastrado = false;
+              this.campoVazio = false;
 
               window.location.reload();
             }, 3000);
           })
           .catch((error) => console.log(error));
+      } else {
+        this.campoVazio = true;
+        setTimeout(() => {
+          this.campoVazio = false;
+          window.location.reload();
+        }, 3000);
       }
     },
   },
