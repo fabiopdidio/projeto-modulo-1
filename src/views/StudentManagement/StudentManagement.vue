@@ -3,7 +3,13 @@
 
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
     <v-container>
-      <h1 class="text-center mt-8 mb-4">Alunos</h1>
+      <router-link to="/dashboard">
+      <v-btn color="grey" class="mt-4 mb-4 ml-10" @click="voltar">
+        <v-icon left>mdi-arrow-left</v-icon>
+      </v-btn>
+    </router-link>
+
+      <h1 class="text-center mt-2 mb-4">Alunos</h1>
 
       <!-- Formulário para buscar alunos -->
       <v-form @submit.prevent="buscarAluno" ref="form">

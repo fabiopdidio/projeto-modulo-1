@@ -2,7 +2,13 @@
   <Header />
 
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
-    <v-card-title class="text-center font-weight-bold mb-4 mt-4"
+    <!-- Botão para voltar ao dashboard -->
+    <router-link to="/dashboard">
+      <v-btn color="grey" class="mt-8 mb-4 ml-10" @click="voltar">
+        <v-icon left>mdi-arrow-left</v-icon>
+      </v-btn>
+    </router-link>
+    <v-card-title class="text-center font-weight-bold mb-4"
       >Novo aluno</v-card-title
     >
 
@@ -18,6 +24,7 @@
               :rules="[(v) => !!v || 'O nome é obrigatório']"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
 
@@ -30,6 +37,7 @@
               :rules="[(v) => !v || /.+@.+\..+/.test(v) || 'Email inválido']"
               type="email"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -44,6 +52,7 @@
               :rules="[(v) => !!v || 'O contato é obrigatório']"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
 
@@ -56,6 +65,7 @@
               :rules="[(v) => !v || v <= getCurrentDate() || 'Data inválida']"
               type="date"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -71,6 +81,7 @@
               @blur="buscarEndereco"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
 
@@ -80,6 +91,7 @@
               label="Logradouro"
               type="text"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -91,14 +103,17 @@
               label="Número"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
+
           <v-col cols="12" sm="6" md="6">
             <v-text-field
               v-model="user.complement"
               label="Complemento"
               type="text"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -110,8 +125,10 @@
               label="Bairro"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
+
           <v-col cols="12" sm="4" md="4">
             <v-text-field
               v-model="user.city"
@@ -126,18 +143,15 @@
               label="Estado"
               type="text"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
 
         <!-- Botão de cadastrar -->
-        <v-btn type="submit" color="blue" class="mt-2 mb-4 mx-auto"
+        <v-btn type="submit" color="blue" class="ml- 8 mt-2 mb-4 mx-auto"
           >Cadastrar</v-btn
         >
-
-        <router-link to="/dashboard">
-          <v-btn color="grey" class="mt-2 mb-4 ml-4">Voltar</v-btn>
-        </router-link>
 
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
