@@ -18,20 +18,54 @@
 
           <!-- Botão para realizar a busca -->
           <v-col>
-            <v-btn type="submit" color="blue" class="mt-4">Buscar</v-btn>
+            <v-btn type="submit" color="blue" class="mt-4"
+              >Buscar<v-icon left>mdi-magnify</v-icon></v-btn
+            >
             <router-link to="/cadastro-novo-aluno">
-              <v-btn color="grey" class="mt-8 mb-4 ml-4">Novo</v-btn>
+              <v-btn color="grey" class="mt-8 mb-4 ml-4"
+                >Novo<v-icon left>mdi-plus</v-icon></v-btn
+              >
             </router-link>
           </v-col>
         </v-row>
       </v-form>
 
       <!-- Lista de alunos -->
-      <v-list>
-        <v-list-item v-for="(aluno, index) in alunos" :key="index">
-          <v-list-item-title>{{ aluno.name }}</v-list-item-title>
+      <v-list class="ml-16">
+        <v-list-item>
+          <v-row align="center" justify="center">
+            <v-col cols="2">
+              <strong>Nome</strong>
+            </v-col>
+            <v-col cols="8">
+              <strong>Ações</strong>
+            </v-col>
+          </v-row>
+        </v-list-item>
+        <v-list-item v-for="(aluno, index) in displayedAlunos" :key="index">
+          <v-row align="center" justify="center">
+            <v-col cols="2">
+              <v-list-item-title>{{ aluno.name }}</v-list-item-title>
+            </v-col>
+
+            <!-- Botão que leva à página de cadastro de treino -->
+            <v-col cols="4">
+              <v-btn small color="success">Montar treino</v-btn>
+            </v-col>
+
+            <!-- Botão que leva à página de visualização de treino -->
+            <v-col cols="4">
+              <v-btn small color="grey">Ver</v-btn>
+            </v-col>
+          </v-row>
         </v-list-item>
       </v-list>
+
+      <!-- Paginação para aparecer apenas 4 alunos por página -->
+      <v-pagination
+        v-model="currentPage"
+        :length="Math.ceil(alunos.length / itemsPerPage)"
+      ></v-pagination>
     </v-container>
   </v-card>
 </template>
@@ -41,6 +75,7 @@ import Header from "../../components/Header.vue";
 
 import axios from "axios";
 export default {
+  // Exporta o Header do componente
   components: {
     Header,
   },
@@ -48,16 +83,27 @@ export default {
     return {
       nomeBusca: "",
       alunos: [],
+      currentPage: 1, // Página inicial como 1
+      itemsPerPage: 4, // 4 Itens máximos
     };
   },
   methods: {
     buscarAluno() {
+      // Requisição para a API
       axios
         .get("http://localhost:3000/students")
         .then((res) => {
-          this.alunos = res.data;
+          this.alunos = res.data.students;
         })
         .catch((error) => console.log(error));
+    },
+  },
+  computed: {
+    // Configuração da paginação
+    displayedAlunos() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.alunos.slice(startIndex, endIndex);
     },
   },
 };
