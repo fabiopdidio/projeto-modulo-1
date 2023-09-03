@@ -2,7 +2,7 @@
   <Header />
 
   <v-card
-    class="mx-auto mt-16"
+    class="mx-auto mt-8"
     max-width="800"
     elevation="10"
     color="white
@@ -22,6 +22,7 @@
           item-value="id"
           :rules="[(v) => !!v || 'Selecione um exercício']"
           variant="outlined"
+          class="ml-4 mr-4"
         ></v-select>
 
         <!-- Campo para numero de repetições, carga e tempo de pausa -->
@@ -36,7 +37,7 @@
             ]"
             type="number"
             variant="outlined"
-            class="mr-2"
+            class="mr-2 ml-4"
           ></v-text-field>
 
           <v-text-field
@@ -56,6 +57,7 @@
             :rules="[(v) => !!v || 'O tempo de pausa é obrigatório']"
             type="time"
             variant="outlined"
+            class="mr-4"
           ></v-text-field>
         </div>
 
@@ -66,6 +68,8 @@
           :items="diasLista"
           :rules="[(v) => !!v || 'Selecione um dia da semana']"
           variant="outlined"
+          class="ml-4 mr-4"
+
         ></v-select>
 
         <!-- Campo de observações do treino -->
@@ -74,10 +78,12 @@
           label="Observações do Treino"
           placeholder="Observações do Treino"
           variant="outlined"
+          class="ml-4 mr-4"
+
         ></v-textarea>
 
         <!-- Botão de cadastrar -->
-        <v-btn type="submit" color="blue" class="mt-2 mb-4">Cadastrar</v-btn>
+        <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4">Cadastrar</v-btn>
         <v-btn type="submit" color="grey" class="mt-2 mb-4 ml-4">Cancelar</v-btn>
 
       </v-form>

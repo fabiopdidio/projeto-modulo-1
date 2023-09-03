@@ -1,17 +1,17 @@
 <template>
   <Header />
 
+  <!-- Configuracao do card -->
   <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
+    <!-- Botão para voltar ao dashboard -->
+    <router-link to="/dashboard">
+      <v-btn color="grey" class="mt-8 mb-4 ml-10" @click="voltar">
+        <v-icon left>mdi-arrow-left</v-icon>
+      </v-btn>
+    </router-link>
+
     <v-container>
-
-      <!-- Botão de voltar para o dashboard-->
-      <router-link to="/dashboard">
-        <v-btn color="grey" class="mt-4 mb-4 ml-10" @click="voltar">
-          <v-icon left>mdi-arrow-left</v-icon>
-        </v-btn>
-      </router-link>
-
-      <h1 class="text-center mt-2">Exercícios</h1>
+      <h1 class="text-center">Exercícios</h1>
 
       <!-- Formulário para cadastro de exercício -->
       <v-form ref="form" @submit.prevent="handleRegistration">
@@ -32,9 +32,19 @@
         </v-row>
       </v-form>
 
-      <!-- Alert para exibir a mensagem de cadastrado com sucesso -->
-      <v-alert v-model="exercicioCadastrado" color="success" top>
+      <!-- alert para exibir a mensagem de cadastrado com sucesso -->
+      <v-alert
+        v-model="exercicioCadastrado"
+        color="success"
+        icon="$success"
+        top
+      >
         Exercício cadastrado com sucesso!
+      </v-alert>
+
+      <!-- alert para exibir a mensagem de campo vazio ou erro -->
+      <v-alert v-model="campoVazio" color="error" icon="$error" top>
+        Digite o nome do exercício!
       </v-alert>
 
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
