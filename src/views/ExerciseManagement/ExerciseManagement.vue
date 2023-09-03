@@ -28,7 +28,9 @@
           ></v-text-field>
 
           <!-- Botão para realizar o cadastro -->
-          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6">Cadastrar</v-btn>
+          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6"
+            >Cadastrar</v-btn
+          >
         </v-row>
       </v-form>
 
@@ -49,8 +51,13 @@
 
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
-        <v-list-item v-for="(exercicio, index) in displayedExercicios" :key="index">
-          <v-list-item-title class="ml-8">{{ exercicio.description }}</v-list-item-title>
+        <v-list-item
+          v-for="(exercicio, index) in displayedExercicios"
+          :key="index"
+        >
+          <v-list-item-title class="ml-8">{{
+            exercicio.description
+          }}</v-list-item-title>
         </v-list-item>
       </v-list>
 
@@ -76,8 +83,8 @@ export default {
       novoExercicio: "",
       exercicios: [],
       exercicioCadastrado: false,
-      currentPage: 1, 
-      exercisesPerPage: 4, 
+      currentPage: 1,
+      exercisesPerPage: 4,
     };
   },
 
