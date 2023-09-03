@@ -4,10 +4,10 @@
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
     <v-container>
       <router-link to="/dashboard">
-      <v-btn color="grey" class="mt-4 mb-4 ml-10" @click="voltar">
-        <v-icon left>mdi-arrow-left</v-icon>
-      </v-btn>
-    </router-link>
+        <v-btn color="grey" class="mt-4 mb-4 ml-10" @click="voltar">
+          <v-icon left>mdi-arrow-left</v-icon>
+        </v-btn>
+      </router-link>
 
       <h1 class="text-center mt-2 mb-4">Alunos</h1>
 
@@ -55,11 +55,13 @@
             </v-col>
 
             <!-- Botão que leva à página de cadastro de treino -->
+            <!-- CRIAR PÁGINA -->
             <v-col cols="4">
               <v-btn small color="success">Montar treino</v-btn>
             </v-col>
 
             <!-- Botão que leva à página de visualização de treino -->
+            <!-- CRIAR PÁGINA -->
             <v-col cols="4">
               <v-btn small color="grey">Ver</v-btn>
             </v-col>
