@@ -1,9 +1,17 @@
 <template>
   <Header />
 
-  <v-card class="mx-auto mt-16" max-width="800" elevation="10" color="white">
+  <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
     <v-container>
-      <h1 class="text-center mt-8">Exercícios</h1>
+
+      <!-- Botão de voltar para o dashboard-->
+      <router-link to="/dashboard">
+        <v-btn color="grey" class="mt-4 mb-4 ml-10" @click="voltar">
+          <v-icon left>mdi-arrow-left</v-icon>
+        </v-btn>
+      </router-link>
+
+      <h1 class="text-center mt-2">Exercícios</h1>
 
       <!-- Formulário para cadastro de exercício -->
       <v-form ref="form" @submit.prevent="handleRegistration">
@@ -12,7 +20,7 @@
             v-model="novoExercicio"
             label="Digite o nome do Exercício"
             placeholder="Digite o nome do Exercício"
-            :rules="[(v) => !!v]"
+            :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
             type="text"
             variant="outlined"
             class="mt-12 ml-12"
@@ -24,10 +32,10 @@
         </v-row>
       </v-form>
 
-      <!-- Snackbar para exibir a mensagem de cadastrado com sucesso -->
-      <v-snackbar v-model="exercicioCadastrado" color="success" top>
+      <!-- Alert para exibir a mensagem de cadastrado com sucesso -->
+      <v-alert v-model="exercicioCadastrado" color="success" top>
         Exercício cadastrado com sucesso!
-      </v-snackbar>
+      </v-alert>
 
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
@@ -36,11 +44,11 @@
         </v-list-item>
       </v-list>
 
-      <!-- Botão para voltar ao dashboard -->
-      <router-link to="/dashboard">
-        <v-btn color="grey" class="mt-2 mb-4 ml-10">Voltar</v-btn>
-      </router-link>
-
+      <!-- Paginação para aparecer apenas 4 exercícios por página -->
+      <v-pagination
+        v-model="currentPage"
+        :length="Math.ceil(exercicios.length / exercisesPerPage)"
+      ></v-pagination>
     </v-container>
   </v-card>
 </template>
@@ -58,6 +66,8 @@ export default {
       novoExercicio: "",
       exercicios: [],
       exercicioCadastrado: false,
+      currentPage: 1, 
+      exercisesPerPage: 4, 
     };
   },
 
@@ -98,22 +108,14 @@ export default {
             this.novoExercicio = "";
             this.$refs.form.resetValidation();
             this.exercicioCadastrado = true;
-            this.campoVazio = false;
 
             setTimeout(() => {
               this.exercicioCadastrado = false;
-              this.campoVazio = false;
 
               window.location.reload();
             }, 3000);
           })
           .catch((error) => console.log(error));
-      } else {
-        this.campoVazio = true;
-        setTimeout(() => {
-          this.campoVazio = false;
-          window.location.reload();
-        }, 3000);
       }
     },
   },
