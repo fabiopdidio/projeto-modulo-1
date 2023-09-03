@@ -1,17 +1,9 @@
 <template>
   <Header />
 
-  <!-- Configuracao do card -->
-  <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
-    <!-- Botão para voltar ao dashboard -->
-    <router-link to="/dashboard">
-      <v-btn color="grey" class="mt-8 mb-4 ml-10" @click="voltar">
-        <v-icon left>mdi-arrow-left</v-icon>
-      </v-btn>
-    </router-link>
-
+  <v-card class="mx-auto mt-16" max-width="800" elevation="10" color="white">
     <v-container>
-      <h1 class="text-center">Exercícios</h1>
+      <h1 class="text-center mt-8">Exercícios</h1>
 
       <!-- Formulário para cadastro de exercício -->
       <v-form ref="form" @submit.prevent="handleRegistration">
@@ -28,35 +20,27 @@
           ></v-text-field>
 
           <!-- Botão para realizar o cadastro -->
-          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6"
-            >Cadastrar</v-btn
-          >
+          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6">Cadastrar</v-btn>
         </v-row>
       </v-form>
 
-      <!-- alert para exibir a mensagem de cadastrado com sucesso -->
-      <v-alert
-        v-model="exercicioCadastrado"
-        color="success"
-        icon="$success"
-        top
-      >
+      <!-- Snackbar para exibir a mensagem de cadastrado com sucesso -->
+      <v-snackbar v-model="exercicioCadastrado" color="success" top>
         Exercício cadastrado com sucesso!
-      </v-alert>
-
-      <!-- alert para exibir a mensagem de campo vazio ou erro -->
-      <v-alert v-model="campoVazio" color="error" icon="$error" top>
-        Digite o nome do exercício!
-      </v-alert>
+      </v-snackbar>
 
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
-        <v-list-item v-for="(exercicio, index) in exercicios" :key="index">
-          <v-list-item-title class="ml-8">{{
-            exercicio.description
-          }}</v-list-item-title>
+        <v-list-item v-for="(exercicio, index) in displayedExercicios" :key="index">
+          <v-list-item-title class="ml-8">{{ exercicio.description }}</v-list-item-title>
         </v-list-item>
       </v-list>
+
+      <!-- Botão para voltar ao dashboard -->
+      <router-link to="/dashboard">
+        <v-btn color="grey" class="mt-2 mb-4 ml-10">Voltar</v-btn>
+      </router-link>
+
     </v-container>
   </v-card>
 </template>
@@ -74,8 +58,19 @@ export default {
       novoExercicio: "",
       exercicios: [],
       exercicioCadastrado: false,
-      campoVazio: false,
     };
+  },
+
+  computed: {
+    startIndex() {
+      return (this.currentPage - 1) * this.exercisesPerPage;
+    },
+    endIndex() {
+      return this.startIndex + this.exercisesPerPage;
+    },
+    displayedExercicios() {
+      return this.exercicios.slice(this.startIndex, this.endIndex);
+    },
   },
 
   mounted() {
