@@ -5,7 +5,7 @@
     <router-link to="/dashboard">Home</router-link>
     <router-link to="/gerenciamento-de-alunos">Alunos</router-link>
     <router-link to="/gerenciamento-de-exercicios">Exercícios</router-link>
-    <a @click="sair">Sair</a>
+    <router-link to="/" @click="sair">Sair</router-link>
   </div>
   </header>
 </template>
