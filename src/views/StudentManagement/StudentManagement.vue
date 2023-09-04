@@ -25,6 +25,7 @@
           <!-- Botão para realizar a busca -->
           <v-col>
             <v-btn type="submit" color="blue" class="mt-4">Buscar</v-btn>
+            
             <router-link to="/cadastro-novo-aluno">
               <v-btn color="grey-darken-2" class="mt-8 mb-4 ml-4">Novo</v-btn>
             </router-link>
