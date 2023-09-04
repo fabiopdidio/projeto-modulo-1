@@ -53,6 +53,7 @@
           <v-list-item-title class="ml-8">{{
             exercicio.description
           }}</v-list-item-title>
+
         </v-list-item>
       </v-list>
 
@@ -96,19 +97,19 @@ export default {
   },
 
   mounted() {
-    this.error = null;
-    axios
-      .get("http://localhost:3000/exercises")
-      .then((response) => {
-        this.exercises = response.data;
-      })
-      .catch((error) => {
-        this.error =
-          "Erro ao carregar exercícios. Por favor, tente novamente mais tarde.";
-      });
+    this.fetchExercicios();
   },
 
   methods: {
+    fetchExercicios() {
+      axios
+        .get("http://localhost:3000/exercises")
+        .then((res) => {
+          this.exercicios = res.data;
+        })
+        .catch((error) => console.log(error));
+    },
+
     handleRegistration() {
       if (this.novoExercicio.trim() !== "") {
         axios
