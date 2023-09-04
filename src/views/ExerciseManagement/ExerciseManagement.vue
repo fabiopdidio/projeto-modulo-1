@@ -20,7 +20,7 @@
             v-model="novoExercicio"
             label="Digite o nome do Exercício"
             placeholder="Digite o nome do Exercício"
-            :rules="[(v) => !!v]"
+            :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
             type="text"
             variant="outlined"
             class="mt-12 ml-12"
@@ -42,17 +42,19 @@
         Exercício cadastrado com sucesso!
       </v-alert>
 
-      <!-- alert para exibir a mensagem de campo vazio ou erro -->
-      <v-alert v-model="campoVazio" color="error" icon="$error" top>
-        Digite o nome do exercício!
-      </v-alert>
-
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
-      <v-list>
+      <v-list class="mt-4">
         <v-list-item v-for="(exercicio, index) in displayedExercicios" :key="index">
           <v-list-item-title class="ml-8">{{ exercicio.description }}</v-list-item-title>
         </v-list-item>
       </v-list>
+
+      <!-- Paginação para aparecer apenas 4 exercícios por página -->
+      <v-pagination
+        v-model="currentPage"
+        :length="Math.ceil(exercicios.length / exercisesPerPage)"
+      ></v-pagination>
+
     </v-container>
   </v-card>
 </template>
@@ -70,6 +72,8 @@ export default {
       novoExercicio: "",
       exercicios: [],
       exercicioCadastrado: false,
+      currentPage: 1, 
+      exercisesPerPage: 4, 
       campoVazio: false,
     };
   },
@@ -111,22 +115,14 @@ export default {
             this.novoExercicio = "";
             this.$refs.form.resetValidation();
             this.exercicioCadastrado = true;
-            this.campoVazio = false;
 
             setTimeout(() => {
               this.exercicioCadastrado = false;
-              this.campoVazio = false;
 
               window.location.reload();
             }, 3000);
           })
           .catch((error) => console.log(error));
-      } else {
-        this.campoVazio = true;
-        setTimeout(() => {
-          this.campoVazio = false;
-          window.location.reload();
-        }, 3000);
       }
     },
   },
