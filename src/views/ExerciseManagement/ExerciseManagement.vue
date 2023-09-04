@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header/>
 
   <!-- Configuracao do card -->
   <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
@@ -54,6 +54,7 @@
         v-model="currentPage"
         :length="Math.ceil(exercicios.length / exercisesPerPage)"
       ></v-pagination>
+
     </v-container>
   </v-card>
 </template>
@@ -73,6 +74,7 @@ export default {
       exercicioCadastrado: false,
       currentPage: 1, 
       exercisesPerPage: 4, 
+      campoVazio: false,
     };
   },
 

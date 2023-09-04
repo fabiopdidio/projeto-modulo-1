@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto mt-16" max-width="500" elevation="10" color="white">
-    <v-card-title class="text-center font-weight-bold ma-8"
+  <v-card class="mx-auto mt-8" max-width="500" elevation="10" color="white">
+    <v-card-title class="text-center font-weight-bold mt-6 mb-4"
       >Crie sua conta</v-card-title
     >
     <v-card-text>
@@ -27,7 +27,7 @@
           ]"
           type="email"
           variant="outlined"
-          class="mr-8 ml-8"
+          class="mr-8 ml-8 mt-3"
         ></v-text-field>
 
         <!-- Campo para a senha com validação do vuetify -->
@@ -43,7 +43,7 @@
           ]"
           type="password"
           variant="outlined"
-          class="mr-8 ml-8"
+          class="mr-8 ml-8 mt-3"
         ></v-text-field>
 
         <!-- Campo para confirmação de senha com validação do vuetify -->
@@ -57,30 +57,36 @@
           ]"
           type="password"
           variant="outlined"
-          class="mr-8 ml-8"
+          class="mr-8 ml-8 mt-3"
         ></v-text-field>
 
         <!-- Campo para escolha do plano com o plano bronze como padrão e com validação do vuetify -->
         <v-select
           v-model="user.plan"
-          :items="['Bronze', 'Prata', 'Ouro']"
+          :items="planOptions"
           label="Tipo de plano"
           variant="outlined"
-          class="mr-8 ml-8"
+          class="mr-8 ml-8 mt-3"
         ></v-select>
 
         <!-- Botão de cadastrar leva o usuário ao dashboard -->
         <div class="d-flex justify-center">
-          <v-btn type="submit" color="blue" class="mt-2 mb-4 mr-4">Cadastrar</v-btn>
+          <v-btn type="submit" color="blue" class="mt-2 mb-4 mr-4"
+            >Cadastrar</v-btn
+          >
 
           <!-- Botão de voltar leva o usuário de volta à página de login -->
-          <v-btn color="grey" class="mt-2 mb-4" @click="$router.push('/')"
+          <v-btn
+            color="grey-darken-2"
+            class="mt-2 mb-4"
+            @click="$router.push('/')"
             >Voltar</v-btn
           >
         </div>
 
         <div v-if="error" class="error-message">{{ error }}</div>
       </v-form>
+
     </v-card-text>
   </v-card>
 </template>
@@ -92,13 +98,18 @@ export default {
   data() {
     return {
       user: {
-        nome: "",
+        name: "",
         email: "",
         password: "",
         passwordConfirmation: "",
-        plan: "Bronze",
+        plan: "Bronze", // Deixa pre-selecionado o plano bronze
       },
       error: "",
+      planOptions: [
+        { title: "Bronze", value: "bronze" },
+        { title: "Prata", value: "silver" },
+        { title: "Ouro", value: "gold" },
+      ],// array para definir um valor e mostrar de outra maneira para o usuario
     };
   },
   methods: {
@@ -117,10 +128,9 @@ export default {
         });
 
         if (response.status === 201) {
-          // Salvar o nome do usuário no Local Storage
-          localStorage.setItem("name", this.user.name);
+          localStorage.setItem("name", this.user.name); // Salva o nome do usuário no Local Storage
           alert("Usuário cadastrado com sucesso!");
-          this.$router.push("/"); // Leva usuario para a pagina de login
+          this.$router.push("/"); // Leva usuario de volta para a pagina de login
         }
       } catch (error) {
         if (error.response) {
