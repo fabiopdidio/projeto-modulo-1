@@ -5,7 +5,7 @@
   <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
     <!-- Botão para voltar ao dashboard -->
     <router-link to="/dashboard">
-      <v-btn color="grey" class="mt-8 mb-4 ml-10" @click="voltar">
+      <v-btn color="grey-darken-2" class="mt-8 ml-10" @click="voltar">
         <v-icon left>mdi-arrow-left</v-icon>
       </v-btn>
     </router-link>
