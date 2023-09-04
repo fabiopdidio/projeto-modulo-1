@@ -1,8 +1,14 @@
 <template>
   <Header />
 
-  <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
-    <v-card-title class="text-center font-weight-bold mb-4 mt-4"
+  <v-card class="mx-auto mt-4" max-width="700" elevation="10" color="white">
+    <!-- Botão para voltar ao dashboard -->
+    <router-link to="/dashboard">
+      <v-btn color="grey-darken-2" class="mt-6 ml-8" @click="voltar">
+        <v-icon left>mdi-arrow-left</v-icon>
+      </v-btn>
+    </router-link>
+    <v-card-title class="text-center font-weight-bold mb-4"
       >Novo aluno</v-card-title
     >
 
@@ -10,14 +16,15 @@
       <v-form ref="form" @submit.prevent="handleRegistration">
         <!-- Campo para o nome completo obrigatório -->
         <v-row>
-          <v-col cols="12" sm="6">
+          <v-col cols="12" sm="6" ml-4>
             <v-text-field
-              v-model="user.name"
+              v-model="user.fullname"
               label="Nome completo"
               placeholder="Nome completo"
               :rules="[(v) => !!v || 'O nome é obrigatório']"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
 
@@ -30,6 +37,7 @@
               :rules="[(v) => !v || /.+@.+\..+/.test(v) || 'Email inválido']"
               type="email"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -44,18 +52,20 @@
               :rules="[(v) => !!v || 'O contato é obrigatório']"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
 
           <!-- Campo para a data de nascimento opcional -->
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="user.birth"
+              v-model="user.date_birth"
               label="Data de nascimento"
               placeholder="Data de nascimento"
               :rules="[(v) => !v || v <= getCurrentDate() || 'Data inválida']"
               type="date"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -71,6 +81,7 @@
               @blur="buscarEndereco"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
 
@@ -80,6 +91,7 @@
               label="Logradouro"
               type="text"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -91,14 +103,17 @@
               label="Número"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
+
           <v-col cols="12" sm="6" md="6">
             <v-text-field
               v-model="user.complement"
               label="Complemento"
               type="text"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -110,8 +125,10 @@
               label="Bairro"
               type="text"
               variant="outlined"
+              class="ml-4"
             ></v-text-field>
           </v-col>
+
           <v-col cols="12" sm="4" md="4">
             <v-text-field
               v-model="user.city"
@@ -126,21 +143,19 @@
               label="Estado"
               type="text"
               variant="outlined"
+              class="mr-4"
             ></v-text-field>
           </v-col>
         </v-row>
 
         <!-- Botão de cadastrar -->
-        <v-btn type="submit" color="blue" class="mt-2 mb-4 mx-auto"
+        <v-btn type="submit" color="blue" class="ml- 8 mt-2 mb-4 mx-auto"
           >Cadastrar</v-btn
         >
 
-        <router-link to="/dashboard">
-          <v-btn color="grey" class="mt-2 mb-4 ml-4">Voltar</v-btn>
-        </router-link>
-
         <div v-if="error" class="error-message">{{ error }}</div>
         <div v-if="success" class="success-message">{{ success }}</div>
+
       </v-form>
     </v-card-text>
   </v-card>
@@ -157,10 +172,10 @@ export default {
   data() {
     return {
       user: {
-        name: "",
+        fullname: "",
         email: "",
         contact: "",
-        birth: "",
+        date_birth: "",
         cep: "",
         street: "",
         number: "",
@@ -193,13 +208,13 @@ export default {
           this.user.city = response.data.localidade;
           this.user.province = response.data.uf;
         } catch (error) {
-          this.error = "Falha ao buscar endereço.";
+          this.error = "";
         }
       }
     },
 
     async handleRegistration() {
-      if (!this.user.name || !this.user.contact || !this.user.cep) {
+      if (!this.user.fullname || !this.user.contact || !this.user.cep) {
         this.error = "Preencha todos os campos obrigatórios.";
         this.success = "";
         return;
@@ -210,10 +225,10 @@ export default {
       if (isValid) {
         try {
           const response = await axios.post("http://localhost:3000/students", {
-            name: this.user.name,
+            fullname: this.user.fullname,
             email: this.user.email,
             contact: this.user.contact,
-            date_birth: this.user.birth,
+            date_birth: this.user.date_birth,
             cep: this.user.cep,
             street: this.user.street,
             number: this.user.number,
