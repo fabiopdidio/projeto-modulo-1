@@ -69,7 +69,6 @@
           :rules="[(v) => !!v || 'Selecione um dia da semana']"
           variant="outlined"
           class="ml-4 mr-4"
-
         ></v-select>
 
         <!-- Campo de observações do treino -->
@@ -79,13 +78,15 @@
           placeholder="Observações do Treino"
           variant="outlined"
           class="ml-4 mr-4"
-
         ></v-textarea>
 
         <!-- Botão de cadastrar -->
-        <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4">Cadastrar</v-btn>
-        <v-btn type="submit" color="grey" class="mt-2 mb-4 ml-4">Cancelar</v-btn>
-
+        <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4"
+          >Cadastrar</v-btn
+        >
+        <v-btn type="submit" color="grey" class="mt-2 mb-4 ml-4"
+          >Cancelar</v-btn
+        >
       </v-form>
 
       <div v-if="error" class="error-message">{{ error }}</div>
@@ -95,7 +96,6 @@
 
 <script>
 import Header from "../../components/Header.vue";
-
 import axios from "axios";
 
 export default {
@@ -107,10 +107,11 @@ export default {
       user: {
         student_id: 0,
         exercise_id: "",
-        repetitions: "",
+        repetitions: 1,
         weight: "",
         break_time: "",
         observations: "",
+        day: "segunda", // Carregue o select com o dia atual marcado (por exemplo, "segunda")
       },
       diasLista: [
         {
@@ -152,7 +153,7 @@ export default {
       this.error = null;
       try {
         const response = await axios.post(
-          "http://localhost:3000/training",
+          "http://localhost:3000/workouts",
           this.user
         );
       } catch (error) {
@@ -165,7 +166,7 @@ export default {
   mounted() {
     this.error = null;
     axios
-      .get("/exercises")
+      .get("http://localhost:3000/exercises")
       .then((response) => {
         this.exercises = response.data;
       })

@@ -28,7 +28,9 @@
           ></v-text-field>
 
           <!-- Botão para realizar o cadastro -->
-          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6">Cadastrar</v-btn>
+          <v-btn type="submit" color="blue" class="mt-14 mr-8 ml-6"
+            >Cadastrar</v-btn
+          >
         </v-row>
       </v-form>
 
@@ -49,8 +51,13 @@
 
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
-        <v-list-item v-for="(exercicio, index) in displayedExercicios" :key="index">
-          <v-list-item-title class="ml-8">{{ exercicio.description }}</v-list-item-title>
+        <v-list-item
+          v-for="(exercicio, index) in displayedExercicios"
+          :key="index"
+        >
+          <v-list-item-title class="ml-8">{{
+            exercicio.description
+          }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-container>
@@ -86,19 +93,18 @@ export default {
     },
   },
 
-  mounted() {
-    this.fetchExercicios();
-  },
-
-  methods: {
-    fetchExercicios() {
-      axios
-        .get("http://localhost:3000/exercises")
-        .then((res) => {
-          this.exercicios = res.data;
-        })
-        .catch((error) => console.log(error));
-    },
+    mounted() {
+    this.error = null;
+    axios
+      .get("http://localhost:3000/exercises")
+      .then((response) => {
+        this.exercises = response.data;
+      })
+      .catch((error) => {
+        this.error =
+          "Erro ao carregar exercícios. Por favor, tente novamente mais tarde.";
+      });
+    }
 
     handleRegistration() {
       if (this.novoExercicio.trim() !== "") {
