@@ -42,13 +42,8 @@
         Exercício cadastrado com sucesso!
       </v-alert>
 
-      <!-- alert para exibir a mensagem de campo vazio ou erro -->
-      <v-alert v-model="campoVazio" color="error" icon="$error" top>
-        Digite o nome do exercício!
-      </v-alert>
-
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
-      <v-list>
+      <v-list class="mt-4">
         <v-list-item v-for="(exercicio, index) in displayedExercicios" :key="index">
           <v-list-item-title class="ml-8">{{ exercicio.description }}</v-list-item-title>
         </v-list-item>
