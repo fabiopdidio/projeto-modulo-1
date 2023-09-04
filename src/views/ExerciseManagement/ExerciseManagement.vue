@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header/>
 
   <!-- Configuracao do card -->
   <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
