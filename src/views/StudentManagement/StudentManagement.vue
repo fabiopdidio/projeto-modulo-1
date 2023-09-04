@@ -4,12 +4,12 @@
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
     <v-container>
       <router-link to="/dashboard">
-        <v-btn color="grey" class="mt-4 mb-4 ml-10" @click="voltar">
+        <v-btn color="grey-darken-2" class="mt-4 mb-4 ml-10" @click="voltar">
           <v-icon left>mdi-arrow-left</v-icon>
         </v-btn>
       </router-link>
 
-      <h1 class="text-center mt-2 mb-4">Alunos</h1>
+      <h1 class="text-center mb-4">Alunos</h1>
 
       <!-- Formulário para buscar alunos -->
       <v-form @submit.prevent="buscarAluno" ref="form">
@@ -24,13 +24,9 @@
 
           <!-- Botão para realizar a busca -->
           <v-col>
-            <v-btn type="submit" color="blue" class="mt-4"
-              >Buscar<v-icon left>mdi-magnify</v-icon></v-btn
-            >
+            <v-btn type="submit" color="blue" class="mt-4">Buscar</v-btn>
             <router-link to="/cadastro-novo-aluno">
-              <v-btn color="grey" class="mt-8 mb-4 ml-4"
-                >Novo<v-icon left>mdi-plus</v-icon></v-btn
-              >
+              <v-btn color="grey-darken-2" class="mt-8 mb-4 ml-4">Novo</v-btn>
             </router-link>
           </v-col>
         </v-row>
@@ -63,7 +59,7 @@
             <!-- Botão que leva à página de visualização de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="grey">Ver</v-btn>
+              <v-btn small color="grey-darken-2">Ver</v-btn>
             </v-col>
           </v-row>
         </v-list-item>
