@@ -18,6 +18,7 @@
           v-model="user.exercise_id"
           label="Exercício"
           :items="exercises"
+          item-title="description"
           item-text="name"
           item-value="id"
           :rules="[(v) => !!v || 'Selecione um exercício']"
@@ -84,7 +85,7 @@
         <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4"
           >Cadastrar</v-btn
         >
-        <v-btn type="submit" color="grey" class="mt-2 mb-4 ml-4"
+        <v-btn type="submit" color="grey-darken-2" class="mt-2 mb-4 ml-4"
           >Cancelar</v-btn
         >
       </v-form>
@@ -111,7 +112,7 @@ export default {
         weight: "",
         break_time: "",
         observations: "",
-        day: "segunda", // Carregue o select com o dia atual marcado (por exemplo, "segunda")
+        day: "segunda", // Deixa o primeiro dia como segunda
       },
       diasLista: [
         {
