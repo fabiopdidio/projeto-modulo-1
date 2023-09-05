@@ -9,6 +9,12 @@
       color="white"
     >
       <v-container>
+        <router-link to="/gerenciamento-de-alunos">
+        <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4" @click="voltar">
+          <v-icon left>mdi-arrow-left</v-icon>
+        </v-btn>
+      </router-link>
+
         <v-row align="center">
           <v-col cols="auto">
             <v-img
@@ -16,7 +22,7 @@
               alt="Imagem"
               width="50"
               height="50"
-              class="mt-2 ml-2"
+              class="mt-4 ml-4"
             ></v-img>
           </v-col>
           <v-col cols="auto">
@@ -39,7 +45,7 @@
           <v-col cols="auto" v-for="(day, index) in workoutData" :key="index">
             <v-btn
               @click="displayMessage(day)"
-              :color="selectedDay === day ? 'blue' : 'grey'"
+              :color="selectedDay === day ? 'blue' : 'black'"
               size="small"
               class="ml-4 mb-4"
             >
