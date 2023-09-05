@@ -15,8 +15,8 @@
         <v-row class="text-center">
           <v-text-field
             v-model="buscarStudent"
-            label="Digite o nome do Student"
-            placeholder="Digite o nome do Student"
+            label="Digite o nome do aluno"
+            placeholder="Digite o nome do aluno"
             type="text"
             variant="outlined"
             class="mt-4 ml-12"
@@ -27,9 +27,15 @@
           <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6"
             >Buscar</v-btn
           >
-          <v-btn type="submit" color="grey-darken-2" class="mt-6 mr-8"
-            >Novo</v-btn
+
+          <v-btn
+            color="grey-darken-2"
+            class="mt-6 mr-8"
+            @click="$router.push('/cadastro-novo-aluno')"
           >
+            Novo
+          </v-btn>
+
         </v-row>
       </v-form>
 
@@ -54,13 +60,17 @@
             <!-- Botão que leva à página de cadastro de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="success" @click="montarTreino(student.id)">Montar treino</v-btn>
+              <v-btn small color="success" @click="montarTreino(student.id)"
+                >Montar treino</v-btn
+              >
             </v-col>
 
             <!-- Botão que leva à página de visualização de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="verTreino(student.id)">Ver</v-btn>
+              <v-btn small color="grey-darken-2" @click="verTreino(student.id)"
+                >Ver</v-btn
+              >
             </v-col>
           </v-row>
         </v-list-item>
@@ -103,11 +113,11 @@ export default {
   },
   methods: {
     montarTreino(id) {
-      this.$router.push({ name: 'cadastro-de-treino', params: { id } });
+      this.$router.push({ name: "cadastro-de-treino", params: { id } });
     },
     verTreino(id) {
-      this.$router.push({ name: 'visualizacao-de-treino', params: { id } });
-    }
+      this.$router.push({ name: "visualizacao-de-treino", params: { id } });
+    },
   },
   computed: {
     // Configuração da paginação
