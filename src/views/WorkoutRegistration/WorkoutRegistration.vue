@@ -85,7 +85,11 @@
         <v-btn type="submit" color="blue" class="mt-2 mb-4 ml-4"
           >Cadastrar</v-btn
         >
-        <v-btn type="submit" color="grey-darken-2" class="mt-2 mb-4 ml-4"
+        <v-btn
+          type="submit"
+          color="grey-darken-2"
+          class="mt-2 mb-4 ml-4"
+          @click="$router.push('/gerenciamento-de-alunos')"
           >Cancelar</v-btn
         >
       </v-form>
