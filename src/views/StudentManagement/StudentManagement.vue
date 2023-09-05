@@ -11,25 +11,25 @@
 
       <h1 class="text-center mb-4">Alunos</h1>
 
-      <!-- Formulário para buscar alunos -->
-      <v-form @submit.prevent="buscarAluno" ref="form">
-        <v-row>
-          <v-col cols="6" class="mt-6 ml-16">
-            <v-text-field
-              v-model="nomeBusca"
-              variant="outlined"
-              label="Digite o nome do aluno"
-            ></v-text-field>
-          </v-col>
+      <v-form ref="form" @submit.prevent="handleRegistration">
+        <v-row class="text-center">
+          <v-text-field
+            v-model="buscarAluno"
+            label="Digite o nome do Aluno"
+            placeholder="Digite o nome do Aluno"
+            type="text"
+            variant="outlined"
+            class="mt-4 ml-12"
+            required
+          ></v-text-field>
 
-          <!-- Botão para realizar a busca -->
-          <v-col>
-            <v-btn type="submit" color="blue" class="mt-4">Buscar</v-btn>
-            
-            <router-link to="/cadastro-novo-aluno">
-              <v-btn color="grey-darken-2" class="mt-8 mb-4 ml-4">Novo</v-btn>
-            </router-link>
-          </v-col>
+          <!-- Botão para realizar o cadastro -->
+          <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6"
+            >Buscar</v-btn
+          >
+          <v-btn type="submit" color="grey-darken-2" class="mt-6 mr-8"
+            >Novo</v-btn
+          >
         </v-row>
       </v-form>
 
@@ -54,13 +54,13 @@
             <!-- Botão que leva à página de cadastro de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="success" @click="$router.push('/cadastro-de-treino')">Montar treino</v-btn>
+              <v-btn small color="success" @click="montarTreino(aluno.id)">Montar treino</v-btn>
             </v-col>
 
             <!-- Botão que leva à página de visualização de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="$router.push('/visualizacao-de-treino')">Ver</v-btn>
+              <v-btn small color="grey-darken-2" @click="verTreino(aluno.id)">Ver</v-btn>
             </v-col>
           </v-row>
         </v-list-item>
@@ -92,16 +92,22 @@ export default {
       itemsPerPage: 4, // 4 Itens máximos
     };
   },
+  created() {
+    // Requisição para a API ao criar o componente
+    axios
+      .get("http://localhost:3000/students")
+      .then((res) => {
+        this.alunos = res.data.students;
+      })
+      .catch((error) => console.log(error));
+  },
   methods: {
-    buscarAluno() {
-      // Requisição para a API
-      axios
-        .get("http://localhost:3000/students")
-        .then((res) => {
-          this.alunos = res.data.students;
-        })
-        .catch((error) => console.log(error));
+    montarTreino(alunoId) {
+      this.$router.push(`/cadastro-de-treino/${alunoId}`);
     },
+    verTreino(alunoId) {
+      this.$router.push(`/visualizacao-de-treino/${alunoId}`);
+    }
   },
   computed: {
     // Configuração da paginação
