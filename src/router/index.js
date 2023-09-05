@@ -6,6 +6,7 @@ import ExerciseManagement from "../views/ExerciseManagement/ExerciseManagement.v
 import StudentManagement from "../views/StudentManagement/StudentManagement.vue"
 import NewStudent from "../views/NewStudent/NewStudent.vue"
 import WorkoutRegistration from "../views/WorkoutRegistration/WorkoutRegistration.vue"
+import WorkoutVisualization from "../views/WorkoutVisualization/WorkoutVisualization.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,11 @@ const router = createRouter({
       name: "cadastro-de-treino",
       component: WorkoutRegistration,
     },
+    {
+      path: "/visualizacao-de-treino",
+      name: "visualizacao-de-treino",
+      component: WorkoutVisualization
+    }
   ],
 });
 
