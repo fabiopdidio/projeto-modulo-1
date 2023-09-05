@@ -54,13 +54,13 @@
             <!-- Botão que leva à página de cadastro de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="success" @click="$router.push('/cadastro-de-exercicios')">Montar treino</v-btn>
+              <v-btn small color="success" @click="$router.push('/cadastro-de-treino')">Montar treino</v-btn>
             </v-col>
 
             <!-- Botão que leva à página de visualização de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="grey-darken-2">Ver</v-btn>
+              <v-btn small color="grey-darken-2" @click="$router.push('/visualizacao-de-treino')">Ver</v-btn>
             </v-col>
           </v-row>
         </v-list-item>
