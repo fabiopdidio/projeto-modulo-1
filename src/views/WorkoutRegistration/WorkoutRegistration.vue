@@ -35,10 +35,11 @@
             :rules="[
               (v) => !!v || 'O número de repetições é obrigatório',
               (v) => v >= 1 || 'Mínimo uma repetição',
-            ]"
+            ]"  
             type="number"
             variant="outlined"
             class="mr-2 ml-4"
+            required
           ></v-text-field>
 
           <v-text-field
@@ -158,7 +159,7 @@ export default {
       this.error = null;
       try {
         const response = await axios.post(
-          "http://localhost:3000/workouts",
+          "http://localhost:3000/training",
           this.user
         );
       } catch (error) {

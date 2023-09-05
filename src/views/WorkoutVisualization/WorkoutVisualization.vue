@@ -36,9 +36,14 @@
         <h2 class="ma-6">Hoje</h2>
 
         <!-- Lugar para aparecer o treino do dia -->
-        <p v-if="selectedDay" class="ml-4 mb-8">
-          {{ `Eu sou ${selectedDay}` }}
-        </p>
+        <div v-if="selectedDayExercises">
+          <p class="ml-4 mb-8">{{ selectedDay }}</p>
+          <ul>
+            <li v-for="(exercise, index) in selectedDayExercises" :key="index">
+              {{ exercise.name }}
+            </li>
+          </ul>
+        </div>
 
         <!-- Botões para selecionar o dia desejado -->
         <v-row>
@@ -90,12 +95,10 @@ export default {
     this.userInfo = JSON.parse(localStorage.getItem("user-info")) || null;
   },
   methods: {
-
     fetchWorkoutData(day) {
       axios
-        .get(`http://localhost:3000/training/:id`)
+        .get(`http://localhost:3000//workouts?student_id=:id`)
         .then((response) => {
-          // Atualizar os dados do treino para o dia selecionado
           this.workoutData[day] = response.data.exercises;
           this.selectedDay = day;
         })
@@ -105,7 +108,7 @@ export default {
     },
     markExercise(workoutId, dayOfWeek) {
       const requestBody = {
-        workout_id: workoutId,
+        training_id: trainingId,
         student_id: this.userInfo.id,
         day_of_week: dayOfWeek,
       };
