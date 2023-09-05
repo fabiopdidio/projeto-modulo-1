@@ -149,7 +149,7 @@
         </v-row>
 
         <!-- Botão de cadastrar -->
-        <v-btn type="submit" color="blue" class="ml- 8 mt-2 mb-4 mx-auto"
+        <v-btn type="submit" color="blue" class="ml-4 mt-2 mb-4 mx-auto"
           >Cadastrar</v-btn
         >
 

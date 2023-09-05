@@ -54,7 +54,7 @@
             <!-- Botão que leva à página de cadastro de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="success">Montar treino</v-btn>
+              <v-btn small color="success" @click="$router.push('/cadastro-de-exercicios')">Montar treino</v-btn>
             </v-col>
 
             <!-- Botão que leva à página de visualização de treino -->
