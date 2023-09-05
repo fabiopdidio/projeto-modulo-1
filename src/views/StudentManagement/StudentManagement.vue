@@ -9,7 +9,7 @@
         </v-btn>
       </router-link>
 
-      <h1 class="text-center mb-4">Students</h1>
+      <h1 class="text-center mb-4">Alunos</h1>
 
       <v-form ref="form" @submit.prevent="handleRegistration">
         <v-row class="text-center">
@@ -23,10 +23,7 @@
             required
           ></v-text-field>
 
-          <!-- Botão para realizar a busca -->
-          <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6"
-            >Buscar</v-btn
-          >
+          <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6">Buscar</v-btn>
 
           <v-btn
             color="grey-darken-2"
@@ -39,7 +36,6 @@
         </v-row>
       </v-form>
 
-      <!-- Lista de students -->
       <v-list class="ml-16">
         <v-list-item>
           <v-row align="center" justify="center">
@@ -57,40 +53,29 @@
               <v-list-item-title>{{ student.name }}</v-list-item-title>
             </v-col>
 
-            <!-- Botão que leva à página de cadastro de treino -->
-            <!-- CRIAR PÁGINA -->
+            <!-- Botões de ação -->
             <v-col cols="4">
-              <v-btn small color="success" @click="montarTreino(student.id)"
-                >Montar treino</v-btn
-              >
+              <v-btn small color="success" @click="montarTreino(student.id)">Montar treino</v-btn>
             </v-col>
 
-            <!-- Botão que leva à página de visualização de treino -->
-            <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="verTreino(student.id)"
-                >Ver</v-btn
-              >
+              <v-btn small color="grey-darken-2" @click="verTreino(student.id)">Ver</v-btn>
             </v-col>
           </v-row>
         </v-list-item>
       </v-list>
 
-      <!-- Paginação para aparecer apenas 4 students por página -->
-      <v-pagination
-        v-model="currentPage"
-        :length="Math.ceil(students.length / itemsPerPage)"
-      ></v-pagination>
+      <!-- Paginação -->
+      <v-pagination v-model="currentPage" :length="Math.ceil(filteredStudents.length / itemsPerPage)"></v-pagination>
     </v-container>
   </v-card>
 </template>
 
 <script>
 import Header from "../../components/Header.vue";
-
 import axios from "axios";
+
 export default {
-  // Exporta o Header do componente
   components: {
     Header,
   },
@@ -98,12 +83,11 @@ export default {
     return {
       buscarStudent: "",
       students: [],
-      currentPage: 1, // Página inicial como 1
-      itemsPerPage: 4, // 4 Itens máximos
+      currentPage: 1,
+      itemsPerPage: 4,
     };
   },
   created() {
-    // Requisição para a API ao criar o componente
     axios
       .get("http://localhost:3000/students")
       .then((res) => {
@@ -120,11 +104,17 @@ export default {
     },
   },
   computed: {
-    // Configuração da paginação
+    // Filtra os alunos com base no valor de buscarStudent
+    filteredStudents() {
+      return this.students.filter((student) =>
+        student.name.toLowerCase().includes(this.buscarStudent.toLowerCase())
+      );
+    },
+    // Retorna apenas os alunos filtrados que estão na página atual
     displayedStudents() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
-      return this.students.slice(startIndex, endIndex);
+      return this.filteredStudents.slice(startIndex, endIndex);
     },
   },
 };
