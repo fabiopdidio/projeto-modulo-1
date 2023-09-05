@@ -89,10 +89,12 @@ export default {
         "Sábado",
         "Domingo",
       ],
+      name: "",
     };
   },
   mounted() {
     this.userInfo = JSON.parse(localStorage.getItem("user-info")) || null;
+    this.name = localStorage.getItem("username") || "";
   },
   methods: {
     fetchWorkoutData(day) {
