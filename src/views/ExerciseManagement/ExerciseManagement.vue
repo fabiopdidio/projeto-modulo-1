@@ -23,7 +23,7 @@
             :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
             type="text"
             variant="outlined"
-            class="mt-12 ml-12"
+            class="mt-12 ml-12 mb-4"
             required
           ></v-text-field>
 
