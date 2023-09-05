@@ -238,6 +238,11 @@ export default {
             complement: this.user.complement,
           });
 
+          if (response.status === 200) {
+            // Armazena o nome do usuário no Local Storage
+            localStorage.setItem("username", this.user.fullname);
+          }
+
           this.success = "Aluno cadastrado com sucesso!";
           this.error = "";
         } catch (error) {
@@ -247,7 +252,7 @@ export default {
       }
     },
   },
-};
+}
 </script>
 
 <style>
