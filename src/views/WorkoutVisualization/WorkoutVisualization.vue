@@ -10,10 +10,10 @@
     >
       <v-container>
         <router-link to="/gerenciamento-de-alunos">
-        <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4" @click="voltar">
-          <v-icon left>mdi-arrow-left</v-icon>
-        </v-btn>
-      </router-link>
+          <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4" @click="voltar">
+            <v-icon left>mdi-arrow-left</v-icon>
+          </v-btn>
+        </router-link>
 
         <v-row align="center">
           <v-col cols="auto">
@@ -31,10 +31,10 @@
         </v-row>
 
         <!-- Linha para divisão entre título e informações -->
-        <hr class="mt-6"/>
+        <hr class="mt-6" />
 
         <h2 class="ma-6">Hoje</h2>
-        
+
         <!-- Lugar para aparecer o treino do dia -->
         <p v-if="selectedDay" class="ml-4 mb-8">
           {{ `Eu sou ${selectedDay}` }}
@@ -65,6 +65,7 @@
 
 <script>
 import Header from "../../components/Header.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -89,8 +90,38 @@ export default {
     this.userInfo = JSON.parse(localStorage.getItem("user-info")) || null;
   },
   methods: {
-    displayMessage(day) {
-      this.selectedDay = day;
+
+    fetchWorkoutData(day) {
+      axios
+        .get(`http://localhost:3000/training/:id`)
+        .then((response) => {
+          // Atualizar os dados do treino para o dia selecionado
+          this.workoutData[day] = response.data.exercises;
+          this.selectedDay = day;
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar os dados do treino:", error);
+        });
+    },
+    markExercise(workoutId, dayOfWeek) {
+      const requestBody = {
+        workout_id: workoutId,
+        student_id: this.userInfo.id,
+        day_of_week: dayOfWeek,
+      };
+
+      axios
+        .post("http://localhost:3000/training/check", requestBody)
+        .then(() => {
+          const exercises = this.workoutData[dayOfWeek];
+          const exercise = exercises.find((ex) => ex.id === workoutId);
+          if (exercise) {
+            exercise.completed = true;
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao marcar o exercício como concluído:", error);
+        });
     },
   },
 };
