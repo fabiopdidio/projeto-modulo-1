@@ -9,21 +9,21 @@
         </v-btn>
       </router-link>
 
-      <h1 class="text-center mb-4">Alunos</h1>
+      <h1 class="text-center mb-4">Students</h1>
 
       <v-form ref="form" @submit.prevent="handleRegistration">
         <v-row class="text-center">
           <v-text-field
-            v-model="buscarAluno"
-            label="Digite o nome do Aluno"
-            placeholder="Digite o nome do Aluno"
+            v-model="buscarStudent"
+            label="Digite o nome do Student"
+            placeholder="Digite o nome do Student"
             type="text"
             variant="outlined"
             class="mt-4 ml-12"
             required
           ></v-text-field>
 
-          <!-- Botão para realizar o cadastro -->
+          <!-- Botão para realizar a busca -->
           <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6"
             >Buscar</v-btn
           >
@@ -33,7 +33,7 @@
         </v-row>
       </v-form>
 
-      <!-- Lista de alunos -->
+      <!-- Lista de students -->
       <v-list class="ml-16">
         <v-list-item>
           <v-row align="center" justify="center">
@@ -45,31 +45,31 @@
             </v-col>
           </v-row>
         </v-list-item>
-        <v-list-item v-for="(aluno, index) in displayedAlunos" :key="index">
+        <v-list-item v-for="(student, index) in displayedStudents" :key="index">
           <v-row align="center" justify="center">
             <v-col cols="2">
-              <v-list-item-title>{{ aluno.name }}</v-list-item-title>
+              <v-list-item-title>{{ student.name }}</v-list-item-title>
             </v-col>
 
             <!-- Botão que leva à página de cadastro de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="success" @click="montarTreino(aluno.id)">Montar treino</v-btn>
+              <v-btn small color="success" @click="montarTreino(student.id)">Montar treino</v-btn>
             </v-col>
 
             <!-- Botão que leva à página de visualização de treino -->
             <!-- CRIAR PÁGINA -->
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="verTreino(aluno.id)">Ver</v-btn>
+              <v-btn small color="grey-darken-2" @click="verTreino(student.id)">Ver</v-btn>
             </v-col>
           </v-row>
         </v-list-item>
       </v-list>
 
-      <!-- Paginação para aparecer apenas 4 alunos por página -->
+      <!-- Paginação para aparecer apenas 4 students por página -->
       <v-pagination
         v-model="currentPage"
-        :length="Math.ceil(alunos.length / itemsPerPage)"
+        :length="Math.ceil(students.length / itemsPerPage)"
       ></v-pagination>
     </v-container>
   </v-card>
@@ -86,8 +86,8 @@ export default {
   },
   data() {
     return {
-      nomeBusca: "",
-      alunos: [],
+      buscarStudent: "",
+      students: [],
       currentPage: 1, // Página inicial como 1
       itemsPerPage: 4, // 4 Itens máximos
     };
@@ -97,24 +97,24 @@ export default {
     axios
       .get("http://localhost:3000/students")
       .then((res) => {
-        this.alunos = res.data.students;
+        this.students = res.data.students;
       })
       .catch((error) => console.log(error));
   },
   methods: {
-    montarTreino(alunoId) {
-      this.$router.push(`/cadastro-de-treino/${alunoId}`);
+    montarTreino(id) {
+      this.$router.push({ name: 'cadastro-de-treino', params: { id } });
     },
-    verTreino(alunoId) {
-      this.$router.push(`/visualizacao-de-treino/${alunoId}`);
+    verTreino(id) {
+      this.$router.push({ name: 'visualizacao-de-treino', params: { id } });
     }
   },
   computed: {
     // Configuração da paginação
-    displayedAlunos() {
+    displayedStudents() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
-      return this.alunos.slice(startIndex, endIndex);
+      return this.students.slice(startIndex, endIndex);
     },
   },
 };
