@@ -12,7 +12,7 @@
       >Treino</v-card-title
     >
     <v-card-text>
-      <v-form @submit.prevent="handleRegistration">
+      <v-form @submit.prevent="handleRegistration" ref="form">
         <!-- Select para selecionar um exercício previamente cadastrado -->
         <v-select
           v-model="user.exercise_id"
@@ -35,7 +35,7 @@
             :rules="[
               (v) => !!v || 'O número de repetições é obrigatório',
               (v) => v >= 1 || 'Mínimo uma repetição',
-            ]"  
+            ]"
             type="number"
             variant="outlined"
             class="mr-2 ml-4"
@@ -111,7 +111,6 @@ export default {
   data() {
     return {
       user: {
-        student_id: 0,
         exercise_id: "",
         repetitions: 1,
         weight: "",
@@ -150,39 +149,48 @@ export default {
         },
       ],
       exercises: [],
-      error: null,
+      error: "",
+      success: "",
     };
   },
 
   methods: {
     async handleRegistration() {
-      this.error = null;
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/training",
-          this.user
-        );
-      } catch (error) {
-        this.error =
-          "Erro ao cadastrar treino. Por favor, verifique os campos e tente novamente.";
+      const isValid = await this.$refs.form.validate();
+      if (isValid) {
+        try {
+          const response = await axios.post("http://localhost:3000/workouts", {
+            exercise_id: this.user.exercise_id,
+            repetitions: this.user.repetitions,
+            weight: this.user.weight,
+            break_time: this.user.break_time,
+            observations: this.user.observations,
+            day: this.user.day,
+          });
+
+          if (response.status === 200) {
+            alert("Treino cadastrado com sucesso!");
+            this.$refs.form.reset();
+          }
+        } catch (error) {
+          console.error("Erro ao cadastrar treino:", error);
+          this.error = "Erro ao cadastrar treino.";
+        }
       }
     },
   },
-
   mounted() {
-    this.error = null;
     axios
       .get("http://localhost:3000/exercises")
-      .then((response) => {
-        this.exercises = response.data;
-      })
+      .then((res) => (this.exercises = res.data))
       .catch((error) => {
-        this.error =
-          "Erro ao carregar exercícios. Por favor, tente novamente mais tarde.";
+        console.log(error);
+        this.error = "Erro ao carregar exercícios.";
       });
   },
 };
 </script>
+
 
 <style>
 .error-message {
