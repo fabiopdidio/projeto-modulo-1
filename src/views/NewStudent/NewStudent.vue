@@ -12,13 +12,16 @@
       >Novo aluno</v-card-title
     >
 
+    <div v-if="error" class="error-message">({{ error }})</div>
+    <div v-if="success" class="success-message">{{ success }}</div>
+
     <v-card-text>
       <v-form ref="form" @submit.prevent="handleRegistration">
         <!-- Campo para o nome completo obrigatório -->
         <v-row>
           <v-col cols="12" sm="6" ml-4>
             <v-text-field
-              v-model="user.fullname"
+              v-model="user.name"
               label="Nome completo"
               placeholder="Nome completo"
               :rules="[(v) => !!v || 'O nome é obrigatório']"
@@ -34,7 +37,10 @@
               v-model="user.email"
               label="Email"
               placeholder="Email"
-              :rules="[(v) => !v || /.+@.+\..+/.test(v) || 'Email inválido']"
+              :rules="[
+                (v) => !!v || 'O email é obrigatório',
+                (v) => /.+@.+\..+/.test(v) || 'Email inválido',
+              ]"
               type="email"
               variant="outlined"
               class="mr-4"
@@ -152,10 +158,6 @@
         <v-btn type="submit" color="blue" class="ml-4 mt-2 mb-4 mx-auto"
           >Cadastrar</v-btn
         >
-
-        <div v-if="error" class="error-message">{{ error }}</div>
-        <div v-if="success" class="success-message">{{ success }}</div>
-
       </v-form>
     </v-card-text>
   </v-card>
@@ -172,7 +174,7 @@ export default {
   data() {
     return {
       user: {
-        fullname: "",
+        name: "",
         email: "",
         contact: "",
         date_birth: "",
@@ -214,8 +216,13 @@ export default {
     },
 
     async handleRegistration() {
-      if (!this.user.fullname || !this.user.contact || !this.user.cep) {
-        this.error = "Preencha todos os campos obrigatórios.";
+      if (
+        !this.user.name ||
+        !this.user.contact ||
+        !this.user.cep ||
+        !this.user.email.match(/.+@.+\..+/)
+      ) {
+        alert("Preencha todos os dados obrigatorio!");
         this.success = "";
         return;
       }
@@ -225,7 +232,7 @@ export default {
       if (isValid) {
         try {
           const response = await axios.post("http://localhost:3000/students", {
-            fullname: this.user.fullname,
+            name: this.user.name,
             email: this.user.email,
             contact: this.user.contact,
             date_birth: this.user.date_birth,
@@ -240,19 +247,34 @@ export default {
 
           if (response.status === 200) {
             // Armazena o nome do usuário no Local Storage
-            localStorage.setItem("username", this.user.fullname);
+            localStorage.setItem("username", this.user.name);
           }
 
-          this.success = "Aluno cadastrado com sucesso!";
+          this.success = alert("Aluno cadastrado com sucesso!");
           this.error = "";
+          this.clearFields();
         } catch (error) {
           this.error = "Falha ao concluir cadastro de aluno.";
           this.success = "";
         }
       }
     },
+    clearFields() {
+      // Define os campos do usuário de volta para vazio
+      this.user.name = "";
+      this.user.email = "";
+      this.user.contact = "";
+      this.user.date_birth = "";
+      this.user.cep = "";
+      this.user.street = "";
+      this.user.number = "";
+      this.user.neighborhood = "";
+      this.user.city = "";
+      this.user.province = "";
+      this.user.complement = "";
+    },
   },
-}
+};
 </script>
 
 <style>
