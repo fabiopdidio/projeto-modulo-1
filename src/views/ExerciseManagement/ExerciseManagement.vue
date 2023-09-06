@@ -126,7 +126,7 @@ export default {
               this.exercicioCadastrado = false;
 
               window.location.reload();
-            }, 3000);
+            }, 2000);
           })
           .catch((error) => console.log(error));
       }

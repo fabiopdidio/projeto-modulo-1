@@ -95,6 +95,8 @@
             <v-text-field
               v-model="user.street"
               label="Logradouro"
+              placeholder="Logradouro"
+              :rules="[(v) => !!v || 'O logradouro é obrigatório']"
               type="text"
               variant="outlined"
               class="mr-4"
@@ -107,6 +109,8 @@
             <v-text-field
               v-model="user.number"
               label="Número"
+              placeholder="Número"
+              :rules="[(v) => !!v || 'O número é obrigatório']"
               type="text"
               variant="outlined"
               class="ml-4"
@@ -117,6 +121,7 @@
             <v-text-field
               v-model="user.complement"
               label="Complemento"
+              placeholder="Complemento"
               type="text"
               variant="outlined"
               class="mr-4"
@@ -129,6 +134,8 @@
             <v-text-field
               v-model="user.neighborhood"
               label="Bairro"
+              placeholder="Bairro"
+              :rules="[(v) => !!v || 'O bairro é obrigatório']"
               type="text"
               variant="outlined"
               class="ml-4"
@@ -139,6 +146,8 @@
             <v-text-field
               v-model="user.city"
               label="Cidade"
+              placeholder="Cidade"
+              :rules="[(v) => !!v || 'A cidade é obrigatória']"
               type="text"
               variant="outlined"
             ></v-text-field>
@@ -147,6 +156,8 @@
             <v-text-field
               v-model="user.province"
               label="Estado"
+              placeholder="Estado"
+              :rules="[(v) => !!v || 'O estado é obrigatória']"
               type="text"
               variant="outlined"
               class="mr-4"
