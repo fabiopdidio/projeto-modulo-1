@@ -17,6 +17,7 @@
         <v-select
           v-model="user.exercise_id"
           label="Exercício"
+          placeholder="Exercício"
           :items="exercises"
           item-title="description"
           item-text="name"
@@ -35,7 +36,7 @@
             :rules="[
               (v) => !!v || 'O número de repetições é obrigatório',
               (v) => v >= 1 || 'Mínimo uma repetição',
-            ]"  
+            ]"
             type="number"
             variant="outlined"
             class="mr-2 ml-4"
@@ -67,6 +68,7 @@
         <v-select
           v-model="user.day"
           label="Dia da Semana"
+          placeholder="Dia da Semana"
           :items="diasLista"
           :rules="[(v) => !!v || 'Selecione um dia da semana']"
           variant="outlined"
@@ -158,10 +160,27 @@ export default {
     async handleRegistration() {
       this.error = null;
       try {
-        const response = await axios.post(
-          "http://localhost:3000/training",
-          this.user
-        );
+        const response = await axios.post("http://localhost:3000/workouts", {
+          student_id: this.user.student_id,
+          exercise_id: this.user.exercise_id,
+          repetitions: this.user.repetitions,
+          weight: this.user.weight,
+          break_time: this.user.break_time,
+          observations: this.user.observations,
+          day: this.user.day,
+        });
+
+        if (response.status === 200) {
+          // Armazena os dados no Local Storage
+          localStorage.setItem("student_id", this.user.student_id);
+          localStorage.setItem("exercise_id", this.user.exercise_id);
+          localStorage.setItem("repetitions", this.user.repetitions);
+          localStorage.setItem("weight", this.user.weight);
+          localStorage.setItem("break_time", this.user.break_time);
+          localStorage.setItem("observations", this.user.observations);
+          localStorage.setItem("day", this.user.day);
+        }
+        
       } catch (error) {
         this.error =
           "Erro ao cadastrar treino. Por favor, verifique os campos e tente novamente.";
