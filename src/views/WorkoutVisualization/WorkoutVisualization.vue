@@ -2,15 +2,10 @@
   <div>
     <Header />
 
-    <v-card
-      class="mx-auto my-auto mt-10"
-      max-width="900"
-      elevation="10"
-      color="white"
-    >
+    <v-card class="mx-auto my-auto mt-10" max-width="900" elevation="10" color="white">
       <v-container>
         <router-link to="/gerenciamento-de-alunos">
-          <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4" @click="voltar">
+          <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4">
             <v-icon left>mdi-arrow-left</v-icon>
           </v-btn>
         </router-link>
@@ -26,30 +21,28 @@
             ></v-img>
           </v-col>
           <v-col cols="auto">
-            <h2 class="mt-3">Treinos - {{ userInfo.name }}</h2>
+            <h2 class="mt-3">Treinos - {{ student_id }}</h2>
           </v-col>
         </v-row>
 
-        <!-- Linha para divisão entre título e informações -->
         <hr class="mt-6" />
 
         <h2 class="ma-6">Hoje</h2>
 
-        <!-- Lugar para aparecer o treino do dia -->
         <div v-if="selectedDayExercises">
           <p class="ml-4 mb-8">{{ selectedDay }}</p>
           <ul>
             <li v-for="(exercise, index) in selectedDayExercises" :key="index">
               {{ exercise.name }}
+              <v-btn @click="markExercise(exercise.id, selectedDay)">Marcar Concluído</v-btn>
             </li>
           </ul>
         </div>
 
-        <!-- Botões para selecionar o dia desejado -->
         <v-row>
-          <v-col cols="auto" v-for="(day, index) in workoutData" :key="index">
+          <v-col cols="auto" v-for="(day, index) in workoutDays" :key="index">
             <v-btn
-              @click="displayMessage(day)"
+              @click="selectDay(day)"
               :color="selectedDay === day ? 'blue' : 'black'"
               size="small"
               class="ml-4 mb-4"
@@ -59,10 +52,7 @@
           </v-col>
         </v-row>
 
-        <!-- Ao clicar no botão aparece o treino -->
-        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">
-          {{ `Eu sou ${selectedDay}` }}
-        </p>
+        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">{{ `Treino do dia: ${selectedDay}` }}</p>
       </v-container>
     </v-card>
   </div>
@@ -78,9 +68,11 @@ export default {
   },
   data() {
     return {
-      userInfo: {},
+      student_id: this.$route.params.id,
+      userInfo: JSON.parse(localStorage.getItem("user-info")) || null,
+      name: localStorage.getItem("username") || "",
       selectedDay: null,
-      workoutData: [
+      workoutDays: [
         "Segunda",
         "Terça",
         "Quarta",
@@ -89,20 +81,18 @@ export default {
         "Sábado",
         "Domingo",
       ],
-      name: "",
+      workoutData: {},
     };
   },
   mounted() {
-    this.userInfo = JSON.parse(localStorage.getItem("user-info")) || null;
-    this.name = localStorage.getItem("username") || "";
+    this.fetchWorkoutData();
   },
   methods: {
-    fetchWorkoutData(day) {
+    fetchWorkoutData() {
       axios
-        .get(`http://localhost:3000//workouts?student_id=:id`)
+        .get(`http://localhost:3000/workouts?student_id=${this.student_id}`)
         .then((response) => {
-          this.workoutData[day] = response.data.exercises;
-          this.selectedDay = day;
+          this.workoutData = response.data;
         })
         .catch((error) => {
           console.error("Erro ao buscar os dados do treino:", error);
@@ -110,23 +100,22 @@ export default {
     },
     markExercise(workoutId, dayOfWeek) {
       const requestBody = {
-        training_id: trainingId,
+        workout_id: workoutId,
         student_id: this.userInfo.id,
         day_of_week: dayOfWeek,
       };
 
       axios
-        .post("http://localhost:3000/training/check", requestBody)
+        .post("http://localhost:3000/workouts/check", requestBody)
         .then(() => {
-          const exercises = this.workoutData[dayOfWeek];
-          const exercise = exercises.find((ex) => ex.id === workoutId);
-          if (exercise) {
-            exercise.completed = true;
-          }
         })
         .catch((error) => {
           console.error("Erro ao marcar o exercício como concluído:", error);
         });
+    },
+    selectDay(day) {
+      this.selectedDay = day;
+
     },
   },
 };
