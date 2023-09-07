@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       user: {
-        student_id: 0,
+        student_id: this.$route.params.id,
         exercise_id: "",
         repetitions: 1,
         weight: "",
