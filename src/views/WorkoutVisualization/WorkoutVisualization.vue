@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      student_name: this.$route.params.name,
       student_id: this.$route.params.id,
       userInfo: JSON.parse(localStorage.getItem("user-info")) || null,
       name: localStorage.getItem("username") || "",
