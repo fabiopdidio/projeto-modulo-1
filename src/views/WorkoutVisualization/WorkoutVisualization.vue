@@ -21,7 +21,7 @@
             ></v-img>
           </v-col>
           <v-col cols="auto">
-            <h2 class="mt-3">Treinos - {{ student_id }}</h2>
+            <h2 class="mt-3">Treinos - {{ StudentName }} </h2>
           </v-col>
         </v-row>
 
@@ -68,10 +68,9 @@ export default {
   },
   data() {
     return {
-      student_name: this.$route.params.name,
+      StudentName:  JSON.parse(localStorage.getItem("user-info")) || null,
       student_id: this.$route.params.id,
       userInfo: JSON.parse(localStorage.getItem("user-info")) || null,
-      name: localStorage.getItem("username") || "",
       selectedDay: null,
       workoutDays: [
         "Segunda",
