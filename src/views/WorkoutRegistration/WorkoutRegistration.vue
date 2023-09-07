@@ -1,23 +1,17 @@
 <template>
   <Header />
 
-  <v-card
-    class="mx-auto mt-8"
-    max-width="800"
-    elevation="10"
-    color="white
-  "
-  >
+  <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
     <v-card-title class="text-center font-weight-bold mb-4 mt-6"
       >Treino</v-card-title
     >
+
     <v-card-text>
-      <v-form @submit.prevent="handleRegistration">
+      <v-form @submit.prevent="handleRegistration" ref="form">
         <!-- Select para selecionar um exercício previamente cadastrado -->
         <v-select
           v-model="user.exercise_id"
           label="Exercício"
-          placeholder="Exercício"
           :items="exercises"
           item-title="description"
           item-text="name"
@@ -27,7 +21,7 @@
           class="ml-4 mr-4"
         ></v-select>
 
-        <!-- Campo para numero de repetições, carga e tempo de pausa -->
+        <!-- Campo para número de repetições, carga e tempo de pausa -->
         <div class="d-flex justify-space-between">
           <v-text-field
             v-model="user.repetitions"
@@ -51,6 +45,7 @@
             type="number"
             variant="outlined"
             class="mr-2"
+            required
           ></v-text-field>
 
           <v-text-field
@@ -61,6 +56,7 @@
             type="time"
             variant="outlined"
             class="mr-4"
+            required
           ></v-text-field>
         </div>
 
@@ -68,11 +64,11 @@
         <v-select
           v-model="user.day"
           label="Dia da Semana"
-          placeholder="Dia da Semana"
           :items="diasLista"
           :rules="[(v) => !!v || 'Selecione um dia da semana']"
           variant="outlined"
           class="ml-4 mr-4"
+          required
         ></v-select>
 
         <!-- Campo de observações do treino -->
@@ -89,15 +85,23 @@
           >Cadastrar</v-btn
         >
         <v-btn
-          type="submit"
+          type="button"
           color="grey-darken-2"
           class="mt-2 mb-4 ml-4"
-          @click="$router.push('/gerenciamento-de-alunos')"
+          @click="cancelRegistration"
           >Cancelar</v-btn
+        >
+        <v-btn
+          type="button"
+          color="grey-darken-2"
+          class="mt-2 mb-4 ml-4"
+          @click="resetForm"
+          >Limpar</v-btn
         >
       </v-form>
 
       <div v-if="error" class="error-message">{{ error }}</div>
+      <div v-if="success" class="success-message">{{ success }}</div>
     </v-card-text>
   </v-card>
 </template>
@@ -119,7 +123,7 @@ export default {
         weight: "",
         break_time: "",
         observations: "",
-        day: "segunda", // Deixa o primeiro dia como segunda
+        day: "segunda",
       },
       diasLista: [
         {
@@ -152,53 +156,67 @@ export default {
         },
       ],
       exercises: [],
-      error: null,
+      error: "",
+      success: "",
     };
   },
 
   methods: {
     async handleRegistration() {
-      this.error = null;
-      try {
-        const response = await axios.post("http://localhost:3000/workouts", {
-          student_id: this.user.student_id,
-          exercise_id: this.user.exercise_id,
-          repetitions: this.user.repetitions,
-          weight: this.user.weight,
-          break_time: this.user.break_time,
-          observations: this.user.observations,
-          day: this.user.day,
-        });
+      const isValid = await this.$refs.form.validate();
+      if (isValid) {
+        try {
+          const response = await axios.post("http://localhost:3000/workouts", {
+            student_id: this.user.student_id,
+            exercise_id: this.user.exercise_id,
+            repetitions: this.user.repetitions,
+            weight: this.user.weight,
+            break_time: this.user.break_time,
+            observations: this.user.observations,
+            day: this.user.day,
+          });
 
-        if (response.status === 200) {
-          // Armazena os dados no Local Storage
-          localStorage.setItem("student_id", this.user.student_id);
-          localStorage.setItem("exercise_id", this.user.exercise_id);
-          localStorage.setItem("repetitions", this.user.repetitions);
-          localStorage.setItem("weight", this.user.weight);
-          localStorage.setItem("break_time", this.user.break_time);
-          localStorage.setItem("observations", this.user.observations);
-          localStorage.setItem("day", this.user.day);
+          if (response.status >= 200 && response.status < 300) {
+            this.success = alert("Treino cadastrado com sucesso!");
+            this.resetForm();
+
+            setTimeout(() => {
+              this.success = ""; // Limpa a mensagem de sucesso após alguns segundos
+            }, 2000);
+          }
+        } catch (error) {
+          console.error("Erro ao cadastrar treino:", error);
+          this.error = alert("Erro ao cadastrar treino.");
+
+          setTimeout(() => {
+            this.error = ""; // Limpa a mensagem de erro após alguns segundos
+          }, 2000);
         }
-        
+      }
+    },
+
+    resetForm() {
+      this.$refs.form.reset();
+    },
+
+    cancelRegistration() {
+      this.resetForm();
+      this.$router.push("/gerenciamento-de-alunos");
+    },
+
+    async fetchExercises() {
+      try {
+        const response = await axios.get("http://localhost:3000/exercises");
+        this.exercises = response.data;
       } catch (error) {
-        this.error =
-          "Erro ao cadastrar treino. Por favor, verifique os campos e tente novamente.";
+        console.error("Erro ao carregar exercícios:", error);
+        this.error = "Erro ao carregar exercícios.";
       }
     },
   },
 
   mounted() {
-    this.error = null;
-    axios
-      .get("http://localhost:3000/exercises")
-      .then((response) => {
-        this.exercises = response.data;
-      })
-      .catch((error) => {
-        this.error =
-          "Erro ao carregar exercícios. Por favor, tente novamente mais tarde.";
-      });
+    this.fetchExercises();
   },
 };
 </script>
@@ -206,6 +224,11 @@ export default {
 <style>
 .error-message {
   color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
   margin-top: 10px;
 }
 </style>
