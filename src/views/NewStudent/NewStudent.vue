@@ -259,6 +259,7 @@ export default {
           if (response.status === 200) {
             // Armazena o nome do usuário no Local Storage
             localStorage.setItem("username", this.user.name);
+            localStorage.setItem("student-info", JSON.stringify(this.user));
           }
 
           this.success = alert("Aluno cadastrado com sucesso!");
