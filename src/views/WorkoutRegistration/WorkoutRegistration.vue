@@ -1,16 +1,11 @@
 <template>
   <Header />
 
-  <v-card
-    class="mx-auto mt-8"
-    max-width="800"
-    elevation="10"
-    color="white
-  "
-  >
+  <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
     <v-card-title class="text-center font-weight-bold mb-4 mt-6"
       >Treino</v-card-title
     >
+
     <v-card-text>
       <v-form @submit.prevent="handleRegistration" ref="form">
         <!-- Select para selecionar um exercício previamente cadastrado -->
@@ -26,7 +21,7 @@
           class="ml-4 mr-4"
         ></v-select>
 
-        <!-- Campo para numero de repetições, carga e tempo de pausa -->
+        <!-- Campo para número de repetições, carga e tempo de pausa -->
         <div class="d-flex justify-space-between">
           <v-text-field
             v-model="user.repetitions"
@@ -50,6 +45,7 @@
             type="number"
             variant="outlined"
             class="mr-2"
+            required
           ></v-text-field>
 
           <v-text-field
@@ -60,6 +56,7 @@
             type="time"
             variant="outlined"
             class="mr-4"
+            required
           ></v-text-field>
         </div>
 
@@ -71,6 +68,7 @@
           :rules="[(v) => !!v || 'Selecione um dia da semana']"
           variant="outlined"
           class="ml-4 mr-4"
+          required
         ></v-select>
 
         <!-- Campo de observações do treino -->
@@ -87,15 +85,23 @@
           >Cadastrar</v-btn
         >
         <v-btn
-          type="submit"
+          type="button"
           color="grey-darken-2"
           class="mt-2 mb-4 ml-4"
-          @click="$router.push('/gerenciamento-de-alunos')"
+          @click="cancelRegistration"
           >Cancelar</v-btn
+        >
+        <v-btn
+          type="button"
+          color="grey-darken-2"
+          class="mt-2 mb-4 ml-4"
+          @click="resetForm"
+          >Limpar</v-btn
         >
       </v-form>
 
       <div v-if="error" class="error-message">{{ error }}</div>
+      <div v-if="success" class="success-message">{{ success }}</div>
     </v-card-text>
   </v-card>
 </template>
@@ -111,12 +117,13 @@ export default {
   data() {
     return {
       user: {
+        student_id: 0,
         exercise_id: "",
         repetitions: 1,
         weight: "",
         break_time: "",
         observations: "",
-        day: "segunda", // Deixa o primeiro dia como segunda
+        day: "segunda",
       },
       diasLista: [
         {
@@ -160,6 +167,7 @@ export default {
       if (isValid) {
         try {
           const response = await axios.post("http://localhost:3000/workouts", {
+            student_id: this.user.student_id,
             exercise_id: this.user.exercise_id,
             repetitions: this.user.repetitions,
             weight: this.user.weight,
@@ -168,33 +176,59 @@ export default {
             day: this.user.day,
           });
 
-          if (response.status === 200) {
-            alert("Treino cadastrado com sucesso!");
-            this.$refs.form.reset();
+          if (response.status >= 200 && response.status < 300) {
+            this.success = alert("Treino cadastrado com sucesso!");
+            this.resetForm();
+
+            setTimeout(() => {
+              this.success = ""; // Limpa a mensagem de sucesso após alguns segundos
+            }, 2000);
           }
         } catch (error) {
           console.error("Erro ao cadastrar treino:", error);
-          this.error = "Erro ao cadastrar treino.";
+          this.error = alert("Erro ao cadastrar treino.");
+
+          setTimeout(() => {
+            this.error = ""; // Limpa a mensagem de erro após alguns segundos
+          }, 2000);
         }
       }
     },
-  },
-  mounted() {
-    axios
-      .get("http://localhost:3000/exercises")
-      .then((res) => (this.exercises = res.data))
-      .catch((error) => {
-        console.log(error);
+
+    resetForm() {
+      this.$refs.form.reset();
+    },
+
+    cancelRegistration() {
+      this.resetForm();
+      this.$router.push("/gerenciamento-de-alunos");
+    },
+
+    async fetchExercises() {
+      try {
+        const response = await axios.get("http://localhost:3000/exercises");
+        this.exercises = response.data;
+      } catch (error) {
+        console.error("Erro ao carregar exercícios:", error);
         this.error = "Erro ao carregar exercícios.";
-      });
+      }
+    },
+  },
+
+  mounted() {
+    this.fetchExercises();
   },
 };
 </script>
 
-
 <style>
 .error-message {
   color: red;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: green;
   margin-top: 10px;
 }
 </style>
