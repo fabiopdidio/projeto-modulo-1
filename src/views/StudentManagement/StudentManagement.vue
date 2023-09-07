@@ -99,8 +99,8 @@ export default {
     montarTreino(id) {
       this.$router.push({ name: "cadastro-de-treino", params: { id } });
     },
-    verTreino(id) {
-      this.$router.push({ name: "visualizacao-de-treino", params: { id } });
+    verTreino(id, name) {
+      this.$router.push({ name: "visualizacao-de-treino", params: { id, name } });
     },
   },
   computed: {
