@@ -23,7 +23,9 @@
             required
           ></v-text-field>
 
-          <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6">Buscar</v-btn>
+          <v-btn type="submit" color="blue" class="mt-6 mr-2 ml-6"
+            >Buscar</v-btn
+          >
 
           <v-btn
             color="grey-darken-2"
@@ -32,7 +34,6 @@
           >
             Novo
           </v-btn>
-
         </v-row>
       </v-form>
 
@@ -55,18 +56,25 @@
 
             <!-- Botões de ação -->
             <v-col cols="4">
-              <v-btn small color="success" @click="montarTreino(student.id)">Montar treino</v-btn>
+              <v-btn small color="success" @click="montarTreino(student.id)"
+                >Montar treino</v-btn
+              >
             </v-col>
 
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="verTreino(student.id)">Ver</v-btn>
+              <v-btn small color="grey-darken-2" @click="verTreino(student.id)"
+                >Ver</v-btn
+              >
             </v-col>
           </v-row>
         </v-list-item>
       </v-list>
 
       <!-- Paginação -->
-      <v-pagination v-model="currentPage" :length="Math.ceil(filteredStudents.length / itemsPerPage)"></v-pagination>
+      <v-pagination
+        v-model="currentPage"
+        :length="Math.ceil(filteredStudents.length / itemsPerPage)"
+      ></v-pagination>
     </v-container>
   </v-card>
 </template>
@@ -85,6 +93,7 @@ export default {
       students: [],
       currentPage: 1,
       itemsPerPage: 4,
+      studentName: "",
     };
   },
   created() {
@@ -100,7 +109,12 @@ export default {
       this.$router.push({ name: "cadastro-de-treino", params: { id } });
     },
     verTreino(id, name) {
-      this.$router.push({ name: "visualizacao-de-treino", params: { id, name } });
+      localStorage.setItem("studentSelectedName", name);
+      this.studentName = name;
+      this.$router.push({
+        name: "visualizacao-de-treino",
+        params: { id, name },
+      });
     },
   },
   computed: {
