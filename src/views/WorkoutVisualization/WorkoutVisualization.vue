@@ -27,7 +27,7 @@
           </v-col>
           <v-col cols="auto">
             <!-- Exibir apenas o nome do aluno -->
-            <h2 class="mt-3">Treinos - {{ workouts }}</h2>
+            <h2 class="mt-3">Treinos - {{ studentSelectedName }}</h2>
           </v-col>
         </v-row>
 
