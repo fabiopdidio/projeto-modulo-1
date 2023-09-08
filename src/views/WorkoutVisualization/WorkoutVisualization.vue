@@ -10,7 +10,7 @@
     >
       <v-container>
         <router-link to="/gerenciamento-de-alunos">
-          <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4">
+          <v-btn color="grey darken-2" class="mt-2 mb-4 ml-4">
             <v-icon left>mdi-arrow-left</v-icon>
           </v-btn>
         </router-link>
@@ -27,13 +27,13 @@
           </v-col>
           <v-col cols="auto">
             <!-- Exibir apenas o nome do aluno -->
-            <h2 class="mt-3">Treinos - {{ studentInfo.name }}</h2>
+            <h2 class="mt-3">Treinos - {{ $route.quey.name }}</h2>
           </v-col>
         </v-row>
 
         <hr class="mt-6" />
 
-        <h2 class="ma-6">Hoje</h2>
+        <h2 class="mt-6 ml-4 mb-4">Hoje</h2>
 
         <div v-if="selectedDayExercises">
           <p class="ml-4 mb-8">{{ selectedDay }}</p>
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       student_id: "",
-      studentInfo: {}, 
+      studentInfo: {},
       selectedDay: "",
       workoutDays: [
         "Segunda",
@@ -90,34 +90,24 @@ export default {
         "Sábado",
         "Domingo",
       ],
-      workoutData: {},
+      workouts: {},
+      selectedDayExercises: [],
+      studentSelectedName: "", 
     };
   },
-  async created() {
-    this.student_id = this.$route.params.id;
+  mounted() {
+    this.studentSelectedName = localStorage.getItem("studentSelectedName");
 
-    await this.fetchStudentInfo();
-    this.fetchWorkoutData();
+    axios
+      .get(`http://localhost:3000/workouts?student_id=${this.$route.params.id}`)
+      .then((response) => {
+        this.workouts = response.data;
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar os dados do treino:", error);
+      });
   },
   methods: {
-    async fetchStudentInfo() {
-      try {
-        const response = await axios.get(`http://localhost:3000/students/${this.student_id}`);
-        this.studentInfo = response.data;
-      } catch (error) {
-        console.error("Erro ao buscar informações do aluno:", error);
-      }
-    },
-    fetchWorkoutData() {
-      axios
-        .get(`http://localhost:3000/workouts?student_id=${this.student_id}`)
-        .then((response) => {
-          this.workoutData = response.data;
-        })
-        .catch((error) => {
-          console.error("Erro ao buscar os dados do treino:", error);
-        });
-    },
     markExercise(workoutId, dayOfWeek) {
       const requestBody = {
         workout_id: workoutId,
@@ -134,6 +124,7 @@ export default {
     },
     selectDay(day) {
       this.selectedDay = day;
+      this.selectedDayExercises = this.workouts[day] || [];
     },
   },
 };
