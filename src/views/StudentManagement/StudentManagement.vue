@@ -114,7 +114,7 @@ export default {
     verTreino(id, name) {
       localStorage.setItem("studentSelectedName", name);
       this.studentName = name;
-      this.$router.push(`visualizacao-de-treino/${id}`);
+      this.$router.push(`visualizacao-de-treino/${id}/${name}`);
     },
   },
   computed: {
