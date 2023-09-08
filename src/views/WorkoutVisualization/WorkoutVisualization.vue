@@ -2,7 +2,12 @@
   <div>
     <Header />
 
-    <v-card class="mx-auto my-auto mt-10" max-width="900" elevation="10" color="white">
+    <v-card
+      class="mx-auto my-auto mt-10"
+      max-width="900"
+      elevation="10"
+      color="white"
+    >
       <v-container>
         <router-link to="/gerenciamento-de-alunos">
           <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4">
@@ -21,7 +26,7 @@
             ></v-img>
           </v-col>
           <v-col cols="auto">
-            <h2 class="mt-3">Treinos - {{ studentInfo }} </h2>
+            <h2 class="mt-3">Treinos - {{ studentInfo.students[3].name }}</h2>
           </v-col>
         </v-row>
 
@@ -34,7 +39,9 @@
           <ul>
             <li v-for="(exercise, index) in selectedDayExercises" :key="index">
               {{ exercise.name }}
-              <v-btn @click="markExercise(exercise.id, selectedDay)">Marcar Concluído</v-btn>
+              <v-btn @click="markExercise(exercise.id, selectedDay)"
+                >Marcar Concluído</v-btn
+              >
             </li>
           </ul>
         </div>
@@ -52,7 +59,9 @@
           </v-col>
         </v-row>
 
-        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">{{ `Treino do dia: ${selectedDay}` }}</p>
+        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">
+          {{ `Treino do dia: ${selectedDay}` }}
+        </p>
       </v-container>
     </v-card>
   </div>
@@ -68,10 +77,9 @@ export default {
   },
   data() {
     return {
-      //student-info:  JSON.parse(localStorage.getItem("student-info")) || null,
-      student_id: this.$route.params.id,
-      studentInfo: JSON.parse(localStorage.getItem("student-info")) || null,
-      selectedDay: null,
+      student_id: "",
+      studentInfo: "",
+      selectedDay: "",
       workoutDays: [
         "Segunda",
         "Terça",
@@ -84,10 +92,19 @@ export default {
       workoutData: {},
     };
   },
-  mounted() {
+  async created() {
+    await this.fetchStudentInfo(); 
     this.fetchWorkoutData();
   },
   methods: {
+    async fetchStudentInfo() {
+      try {
+        const response = await axios.get(`http://localhost:3000/students/${this.student_id}`);
+        this.studentInfo = response.data;
+      } catch (error) {
+        console.error("Erro ao buscar informações do aluno:", error);
+      }
+    },
     fetchWorkoutData() {
       axios
         .get(`http://localhost:3000/workouts?student_id=${this.student_id}`)
@@ -107,15 +124,13 @@ export default {
 
       axios
         .post("http://localhost:3000/workouts/check", requestBody)
-        .then(() => {
-        })
+        .then(() => {})
         .catch((error) => {
           console.error("Erro ao marcar o exercício como concluído:", error);
         });
     },
     selectDay(day) {
       this.selectedDay = day;
-
     },
   },
 };

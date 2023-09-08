@@ -62,7 +62,10 @@
             </v-col>
 
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="verTreino(student.id)"
+              <v-btn
+                small
+                color="grey-darken-2"
+                @click="verTreino(student.id, student.name)"
                 >Ver</v-btn
               >
             </v-col>
