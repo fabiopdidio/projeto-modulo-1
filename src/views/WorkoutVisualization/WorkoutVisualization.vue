@@ -2,15 +2,10 @@
   <div>
     <Header />
 
-    <v-card
-      class="mx-auto my-auto mt-10"
-      max-width="900"
-      elevation="10"
-      color="white"
-    >
+    <v-card class="mx-auto my-auto mt-10" max-width="900" elevation="10" color="white">
       <v-container>
         <router-link to="/gerenciamento-de-alunos">
-          <v-btn color="grey darken-2" class="mt-2 mb-4 ml-4">
+          <v-btn color="grey-darken-2" class="mt-2 mb-4 ml-4">
             <v-icon left>mdi-arrow-left</v-icon>
           </v-btn>
         </router-link>
@@ -26,23 +21,20 @@
             ></v-img>
           </v-col>
           <v-col cols="auto">
-            <!-- Exibir apenas o nome do aluno -->
-            <h2 class="mt-3">Treinos - {{ $route.query.name }}</h2>
+            <h2 class="mt-3">Treinos - {{ this.$route.params.name }} </h2>
           </v-col>
         </v-row>
 
         <hr class="mt-6" />
 
-        <h2 class="mt-6 ml-4 mb-4">Hoje</h2>
+        <h2 class="ma-6">Hoje</h2>
 
         <div v-if="selectedDayExercises">
           <p class="ml-4 mb-8">{{ selectedDay }}</p>
           <ul>
             <li v-for="(exercise, index) in selectedDayExercises" :key="index">
               {{ exercise.name }}
-              <v-btn @click="markExercise(exercise.id, selectedDay)"
-                >Marcar Concluído</v-btn
-              >
+              <v-btn @click="markExercise(exercise.id, selectedDay)">Marcar Concluído</v-btn>
             </li>
           </ul>
         </div>
@@ -60,9 +52,7 @@
           </v-col>
         </v-row>
 
-        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">
-          {{ `Treino do dia: ${selectedDay}` }}
-        </p>
+        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">{{ `Treino do dia: ${selectedDay}` }}</p>
       </v-container>
     </v-card>
   </div>
@@ -78,9 +68,11 @@ export default {
   },
   data() {
     return {
-      student_id: "",
-      studentInfo: {},
-      selectedDay: "",
+     
+      student_id: this.$route.params.id,
+      userInfo: JSON.parse(localStorage.getItem("user-info")) || null,
+      name: localStorage.getItem("username") || "",
+      selectedDay: null,
       workoutDays: [
         "Segunda",
         "Terça",
@@ -90,41 +82,41 @@ export default {
         "Sábado",
         "Domingo",
       ],
-      workouts: {},
-      selectedDayExercises: [],
-      studentSelectedName: "", 
+      workoutData: {},
     };
   },
   mounted() {
-    this.studentSelectedName = localStorage.getItem("studentSelectedName");
-
-    axios
-      .get(`http://localhost:3000/workouts?student_id=${this.$route.params.id}`)
-      .then((response) => {
-        this.workouts = response.data;
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar os dados do treino:", error);
-      });
+    this.fetchWorkoutData();
   },
   methods: {
+    fetchWorkoutData() {
+      axios
+        .get(`http://localhost:3000/workouts?student_id=${this.student_id}`)
+        .then((response) => {
+          this.workoutData = response.data;
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar os dados do treino:", error);
+        });
+    },
     markExercise(workoutId, dayOfWeek) {
       const requestBody = {
         workout_id: workoutId,
-        student_id: this.student_id,
+        student_id: this.userInfo.id,
         day_of_week: dayOfWeek,
       };
 
       axios
         .post("http://localhost:3000/workouts/check", requestBody)
-        .then(() => {})
+        .then(() => {
+        })
         .catch((error) => {
           console.error("Erro ao marcar o exercício como concluído:", error);
         });
     },
     selectDay(day) {
       this.selectedDay = day;
-      this.selectedDayExercises = this.workouts[day] || [];
+
     },
   },
 };
