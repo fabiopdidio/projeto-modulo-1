@@ -27,7 +27,7 @@
           </v-col>
           <v-col cols="auto">
             <!-- Exibir apenas o nome do aluno -->
-            <h2 class="mt-3">Treinos - {{ studentSelectedName }}</h2>
+            <h2 class="mt-3">Treinos - {{ $route.quey.name }}</h2>
           </v-col>
         </v-row>
 
@@ -90,21 +90,24 @@ export default {
         "Sábado",
         "Domingo",
       ],
-      workouts: {}, 
-      selectedDayExercises: [], 
+      workouts: {},
+      selectedDayExercises: [],
+      studentSelectedName: "", 
     };
   },
+  mounted() {
+    this.studentSelectedName = localStorage.getItem("studentSelectedName");
+
+    axios
+      .get(`http://localhost:3000/workouts?student_id=${this.$route.params.id}`)
+      .then((response) => {
+        this.workouts = response.data;
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar os dados do treino:", error);
+      });
+  },
   methods: {
-    mounted() {
-      axios
-        .get(`http://localhost:3000/workouts?student_id=${this.$route.params.id}`)
-        .then((response) => {
-          this.workouts = response.data;
-        })
-        .catch((error) => {
-          console.error("Erro ao buscar os dados do treino:", error);
-        });
-    },
     markExercise(workoutId, dayOfWeek) {
       const requestBody = {
         workout_id: workoutId,
