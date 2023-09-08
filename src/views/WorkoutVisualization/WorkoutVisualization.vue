@@ -26,7 +26,8 @@
             ></v-img>
           </v-col>
           <v-col cols="auto">
-            <h2 class="mt-3">Treinos - {{ studentInfo.students[3].name }}</h2>
+            <!-- Exibir apenas o nome do aluno -->
+            <h2 class="mt-3">Treinos - {{ studentInfo.name }}</h2>
           </v-col>
         </v-row>
 
@@ -78,7 +79,7 @@ export default {
   data() {
     return {
       student_id: "",
-      studentInfo: "",
+      studentInfo: {}, 
       selectedDay: "",
       workoutDays: [
         "Segunda",
@@ -93,7 +94,9 @@ export default {
     };
   },
   async created() {
-    await this.fetchStudentInfo(); 
+    this.student_id = this.$route.params.id;
+
+    await this.fetchStudentInfo();
     this.fetchWorkoutData();
   },
   methods: {
@@ -118,7 +121,7 @@ export default {
     markExercise(workoutId, dayOfWeek) {
       const requestBody = {
         workout_id: workoutId,
-        student_id: this.userInfo.id,
+        student_id: this.student_id,
         day_of_week: dayOfWeek,
       };
 
