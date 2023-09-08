@@ -62,7 +62,7 @@
             </v-col>
 
             <v-col cols="4">
-              <v-btn small color="grey-darken-2" @click="verTreino(student.id, student.name)"
+              <v-btn small color="grey-darken-2" @click="()=>verTreino(student.id, student.name)"
                 >Ver</v-btn
               >
             </v-col>
@@ -111,10 +111,7 @@ export default {
     verTreino(id, name) {
       localStorage.setItem("studentSelectedName", name);
       this.studentName = name;
-      this.$router.push({
-        name: "visualizacao-de-treino",
-        params: { id, name },
-      });
+      this.$router.push(`visualizacao-de-treino/${id}`);
     },
   },
   computed: {
