@@ -21,7 +21,7 @@
             ></v-img>
           </v-col>
           <v-col cols="auto">
-            <h2 class="mt-3">Treinos - {{ this.$route.params.id }} {{ this.$route.params.name }}</h2>
+            <h2 class="mt-3">Treinos - {{ this.$route.params.id }} </h2>
           </v-col>
         </v-row>
 
