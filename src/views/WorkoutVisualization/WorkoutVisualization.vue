@@ -27,7 +27,7 @@
           </v-col>
           <v-col cols="auto">
             <!-- Exibir apenas o nome do aluno -->
-            <h2 class="mt-3">Treinos - {{ $route.quey.name }}</h2>
+            <h2 class="mt-3">Treinos - {{ $route.query.name }}</h2>
           </v-col>
         </v-row>
 
