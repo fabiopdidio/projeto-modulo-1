@@ -28,15 +28,19 @@
         <hr class="mt-6" />
 
         <h2 class="ma-6">Hoje</h2>
+        {{ userData }}
 
         <div v-if="selectedDayExercises">
           <p class="ml-4 mb-8">{{ selectedDay }}</p>
-          <ul>
+          <ol>
             <li v-for="(exercise, index) in selectedDayExercises" :key="index">
               {{ exercise.name }}
+              <span v-if="exercise.series && exercise.repetitions">
+                - {{ exercise.series }} séries, {{ exercise.repetitions }} repetições
+              </span>
               <v-btn @click="markExercise(exercise.id, selectedDay)">Marcar Concluído</v-btn>
             </li>
-          </ul>
+          </ol>
         </div>
 
         <v-row>
@@ -85,6 +89,15 @@ export default {
       workoutData: {},
     };
   },
+  computed: {
+    selectedDayExercises() {
+
+      if (this.workoutData[this.selectedDay]) {
+        return this.workoutData[this.selectedDay].exercises || [];
+      }
+      return [];
+    },
+  },
   mounted() {
     this.fetchWorkoutData();
   },
@@ -116,7 +129,6 @@ export default {
     },
     selectDay(day) {
       this.selectedDay = day;
-
     },
   },
 };
