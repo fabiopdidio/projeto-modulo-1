@@ -15,31 +15,38 @@
           </v-btn>
         </router-link>
 
-        <v-row align="center">
+        <v-row>
           <v-col cols="auto">
             <v-img
               src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
               alt="Imagem"
               width="50"
               height="50"
-              class="mt-4 ml-4"
+              class="mt-2 ml-4"
             ></v-img>
           </v-col>
+
           <v-col cols="auto">
             <h2 class="mt-3">Treinos - {{ this.$route.params.name }}</h2>
           </v-col>
         </v-row>
 
-        <hr class="mt-6" />
+        <hr class="mt-5 ml-4 mr-4" />
 
-        <h2 class="ma-6">Hoje</h2>
+        <h2 class="mt-4 ml-6">Hoje</h2>
 
-        <h3 class="ma-6">{{ exerciseDescription }} |  {{ weight }}kg | {{ repetitions }} repetições | {{break_time}} min de pausa  </h3>
+        <p
+          class="mt-2 ml-5"
+          v-for="(exercise, index) in exerciseDescriptions"
+          :key="index"
+        >
+          <input type="checkbox" />
+          {{ exercise }} | {{ weights[index] }} kg |
+          {{ repetitions[index] }} repetições | {{ breakTimes[index] }} min de
+          intervalo
+        </p>
 
-
-        <!-- <h3 class="mb-4 ml-4">{{ workoutData }}</h3> -->
-
-        <v-row>
+        <v-row class="mt-2">
           <v-col cols="auto" v-for="(day, index) in workoutDays" :key="index">
             <v-btn
               @click="selectDay(day)"
@@ -53,8 +60,17 @@
         </v-row>
 
         <p v-if="selectedDay" class="mt-4 ml-4 mb-4">
-          {{ `Treino de ${selectedDay}` }}
+          {{ `Treino de: ${selectedDay}` }}
         </p>
+        
+        <div v-if="selectedWorkout[selectedDay]" class="ml-5">
+          <p v-for="(exercise, index) in selectedWorkout[selectedDay]" :key="index">
+            <input type="checkbox" />
+            {{ exercise.exercise_description }} | {{ exercise.weight }} kg |
+            {{ exercise.repetitions }} repetições | {{ exercise.break_time }} min de intervalo
+          </p>
+
+        </div>
       </v-container>
     </v-card>
   </div>
@@ -72,6 +88,7 @@ export default {
     return {
       student_id: this.$route.params.id,
       selectedDay: "",
+      selectedWorkout: {},
       workoutDays: [
         "Segunda",
         "Terça",
@@ -85,30 +102,26 @@ export default {
     };
   },
   computed: {
-    exerciseDescription() {
-    if (this.workoutData && this.workoutData.length > 0) {
-      return this.workoutData[0].exercise_description;
-      return this.workoutData[0].repetitions;
-    }
-    return "";
+    exerciseDescriptions() {
+      if (this.workoutData && this.workoutData.length > 0) {
+        return this.workoutData.map((item) => item.exercise_description);
+      }
     },
     repetitions() {
-    if (this.workoutData && this.workoutData.length > 0) {
-      return this.workoutData[0].repetitions;
-    }
-    return "";
+      if (this.workoutData && this.workoutData.length > 0) {
+        return this.workoutData.map((item) => item.repetitions);
+      }
     },
-    weight() {
-    if (this.workoutData && this.workoutData.length > 0) {
-      return this.workoutData[0].weight;
-    }
-    return "";
+    weights() {
+      if (this.workoutData && this.workoutData.length > 0) {
+        return this.workoutData.map((item) => item.weight);
+      }
     },
-    break_time() {
-    if (this.workoutData && this.workoutData.length > 0) {
-      return this.workoutData[0].break_time;
-    }
-    return "";
+    breakTimes() {
+      if (this.workoutData && this.workoutData.length > 0) {
+        return this.workoutData.map((item) => item.break_time);
+      }
+      
     },
   },
   mounted() {
@@ -141,6 +154,19 @@ export default {
     },
     selectDay(day) {
       this.selectedDay = day;
+      if (!this.selectedWorkout[day]) {
+        this.fetchWorkoutForDay(day);
+      }
+    },
+    fetchWorkoutForDay(day) {
+      axios
+        .get(`http://localhost:3000/workouts?student_id=${this.student_id}&day=${day}`)
+        .then((response) => {
+          this.selectedWorkout[day] = response.data.workouts;
+        })
+        .catch((error) => {
+          console.error(`Erro ao buscar o treino de ${day}:`, error);
+        });
     },
   },
 };
