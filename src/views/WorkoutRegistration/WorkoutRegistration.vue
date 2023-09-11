@@ -2,7 +2,13 @@
   <Header />
 
   <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
-    <v-card-title class="text-center font-weight-bold mb-4 mt-6"
+    <router-link to="/gerenciamento-de-alunos">
+          <v-btn color="grey-darken-2" class="ml-6 mt-6" @click="voltar">
+            <v-icon left>mdi-arrow-left</v-icon>
+          </v-btn>
+        </router-link>
+
+    <v-card-title class="text-center font-weight-bold mb-4"
       >Treino</v-card-title
     >
 
