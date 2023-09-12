@@ -4,7 +4,7 @@
   <v-container>
     <!-- Mensagem de boas-vindas buscando o nome do usuário na API-->
     <h1 class="text-white mt-16 mb-5 text-center">
-      Bem-vindo, {{ userInfo.name }}
+      Bem-vindo(a), {{ userInfo.name }}
     </h1>
 
     <v-row>
@@ -18,6 +18,7 @@
         >
           <v-row>
             <v-col cols="64">
+              <!-- Card com informacoes de alunos -->
               <v-card-title class="mt-8 ml-10 mr-8"
                 >{{ dashboardInfo.amount_students }} Alunos</v-card-title
               >
@@ -31,6 +32,7 @@
                 Adicionar
               </v-btn>
 
+              <!-- Botão para levar o usuário para a página de gerenciamento de alunos-->
               <v-btn
                 type="submit"
                 color="grey-darken-2"
@@ -64,10 +66,11 @@
         >
           <v-row>
             <v-col cols="6">
+              <!-- Card com o número de exercícios-->
               <v-card-title class="mt-8 ml-10 mr-8 mb-4"
                 >{{ dashboardInfo.amount_exercises }} Exercícios</v-card-title
               >
-
+              <!-- Botão para levar o usuário para a página de gerenciamento de exercícios-->
               <v-btn
                 color="blue"
                 class="mt-2 mb-15 ml-14"
@@ -85,11 +88,9 @@
                 height="80"
                 class="mt-14 ml-16"
               ></v-img>
-
             </v-col>
           </v-row>
         </v-card>
-        
       </v-col>
     </v-row>
   </v-container>
@@ -104,7 +105,7 @@ export default {
     Header,
   },
   data() {
-    return {
+    return { // Informações como array vazio para mostrarem informações da API
       dashboardInfo: {},
       userInfo: {},
     };
