@@ -1,6 +1,7 @@
 <template>
   <Header />
 
+  <!-- Botão de voltar para a página de gerenciamento de alunos -->
   <v-card class="mx-auto mt-8" max-width="800" elevation="10" color="white">
     <router-link to="/gerenciamento-de-alunos">
           <v-btn color="grey-darken-2" class="ml-6 mt-6" @click="voltar">
@@ -27,7 +28,7 @@
           class="ml-4 mr-4"
         ></v-select>
 
-        <!-- Campo para número de repetições, carga e tempo de pausa -->
+        <!-- Campos para número de repetições, carga e tempo de pausa -->
         <div class="d-flex justify-space-between">
           <v-text-field
             v-model="user.repetitions"
@@ -105,7 +106,8 @@
           >Limpar</v-btn
         >
       </v-form>
-
+      
+      <!-- Mensagens de sucesso ou erro -->
       <div v-if="error" class="error-message">{{ error }}</div>
       <div v-if="success" class="success-message">{{ success }}</div>
     </v-card-text>
@@ -183,19 +185,19 @@ export default {
           });
 
           if (response.status >= 200 && response.status < 300) {
-            this.success = alert("Treino cadastrado com sucesso!");
+            this.success = alert("Treino cadastrado com sucesso!"); // Alert ao usuário em caso de sucesso
             this.resetForm();
 
             setTimeout(() => {
-              this.success = ""; // Limpa a mensagem de sucesso após alguns segundos
+              this.success = ""; // Limpa a mensagem de sucesso após 2 segundos
             }, 2000);
           }
         } catch (error) {
           console.error("Erro ao cadastrar treino:", error);
-          this.error = alert("Erro ao cadastrar treino.");
+          this.error = alert("Erro ao cadastrar treino."); // Alert ao usuário em caso de erro
 
           setTimeout(() => {
-            this.error = ""; // Limpa a mensagem de erro após alguns segundos
+            this.error = ""; // Limpa a mensagem de erro após 2 segundos
           }, 2000);
         }
       }
@@ -207,12 +209,12 @@ export default {
 
     cancelRegistration() {
       this.resetForm();
-      this.$router.push("/gerenciamento-de-alunos");
+      this.$router.push("/gerenciamento-de-alunos"); // cancel volta para página anterior
     },
 
     async fetchExercises() {
       try {
-        const response = await axios.get("http://localhost:3000/exercises");
+        const response = await axios.get("http://localhost:3000/exercises"); // Busca exercícios na API
         this.exercises = response.data;
       } catch (error) {
         console.error("Erro ao carregar exercícios:", error);
