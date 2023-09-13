@@ -15,6 +15,7 @@ O TrainSys oferece uma variedade de recursos úteis para facilitar a gestão de 
 ## Requisitos de Instalação
 
 Antes de começar a utilizar o TrainSys, certifique-se de que o Node.js esteja instalado em seu sistema.
+Também é necessário executar a API disponível no link (https://github.com/DEVinZucchetti/api_academia)
 
 ## Guia de Uso
 
