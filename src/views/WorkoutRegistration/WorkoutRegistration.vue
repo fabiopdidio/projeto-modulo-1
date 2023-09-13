@@ -107,9 +107,6 @@
         >
       </v-form>
       
-      <!-- Mensagens de sucesso ou erro -->
-      <div v-if="error" class="error-message">{{ error }}</div>
-      <div v-if="success" class="success-message">{{ success }}</div>
     </v-card-text>
   </v-card>
 </template>
@@ -164,8 +161,6 @@ export default {
         },
       ],
       exercises: [],
-      error: "",
-      success: "",
     };
   },
 
@@ -230,13 +225,4 @@ export default {
 </script>
 
 <style>
-.error-message {
-  color: red;
-  margin-top: 10px;
-}
-
-.success-message {
-  color: green;
-  margin-top: 10px;
-}
 </style>
