@@ -17,13 +17,13 @@
       <v-form ref="form" @submit.prevent="handleRegistration">
         <v-row class="text-center">
           <v-text-field
-            v-model="novoExercicio"
+            v-model="newExercise"
             label="Digite o nome do Exercício"
             placeholder="Digite o nome do Exercício"
             :rules="[(v) => !!v || 'O nome do exercício é obrigatório']"
             type="text"
             variant="outlined"
-            class="mt-12 ml-12 mb-4"
+            class="mt-12 ml-12"
             required
           ></v-text-field>
 
@@ -36,7 +36,7 @@
 
       <!-- alert para exibir a mensagem de cadastrado com sucesso -->
       <v-alert
-        v-model="exercicioCadastrado"
+        v-model="exerciseRegistered"
         color="success"
         icon="$success"
         top
@@ -47,11 +47,11 @@
       <!-- Lista de exercícios adicionados que aparece abaixo do campo-->
       <v-list>
         <v-list-item
-          v-for="(exercicio, index) in displayedExercicios"
+          v-for="(exercise, index) in displayedExercises"
           :key="index"
         >
           <v-list-item-title class="ml-8">{{
-            exercicio.description
+            exercise.description
           }}</v-list-item-title>
 
         </v-list-item>
@@ -60,7 +60,7 @@
       <!-- Paginação para aparecer apenas 4 exercícios por página -->
       <v-pagination
         v-model="currentPage"
-        :length="Math.ceil(exercicios.length / exercisesPerPage)"
+        :length="Math.ceil(exercises.length / exercisesPerPage)"
       ></v-pagination>
     </v-container>
   </v-card>
@@ -76,54 +76,54 @@ export default {
   },
   data() {
     return {
-      novoExercicio: "",
-      exercicios: [],
-      exercicioCadastrado: false,
+      newExercise: "",
+      exercises: [],
+      exerciseRegistered: false,
       currentPage: 1,
       exercisesPerPage: 4,
     };
   },
 
-  computed: {
+  computed: { // Paginação
     startIndex() {
       return (this.currentPage - 1) * this.exercisesPerPage;
     },
     endIndex() {
       return this.startIndex + this.exercisesPerPage;
     },
-    displayedExercicios() {
-      return this.exercicios.slice(this.startIndex, this.endIndex);
+    displayedExercises() {
+      return this.exercises.slice(this.startIndex, this.endIndex);
     },
   },
 
   mounted() {
-    this.fetchExercicios();
+    this.fetchExercises();
   },
 
   methods: {
-    fetchExercicios() {
+    fetchExercises() {
       axios
-        .get("http://localhost:3000/exercises")
+        .get("http://localhost:3000/exercises") // Busca lista de exercícios na API
         .then((res) => {
-          this.exercicios = res.data;
+          this.exercises = res.data;
         })
         .catch((error) => console.log(error));
     },
 
     handleRegistration() {
-      if (this.novoExercicio.trim() !== "") {
+      if (this.newExercise.trim() !== "") {
         axios
-          .post("http://localhost:3000/exercises", {
-            description: this.novoExercicio,
+          .post("http://localhost:3000/exercises", { // Envia para a API o novo exercício
+            description: this.newExercise,
           })
           .then((res) => {
-            this.exercicios.push(res.data);
-            this.novoExercicio = "";
+            this.exercises.push(res.data);
+            this.newExercise = "";
             this.$refs.form.resetValidation();
-            this.exercicioCadastrado = true;
+            this.exerciseRegistered = true;
 
             setTimeout(() => {
-              this.exercicioCadastrado = false;
+              this.exerciseRegistered = false;
 
               window.location.reload();
             }, 2000);
