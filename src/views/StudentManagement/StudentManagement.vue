@@ -1,6 +1,7 @@
 <template>
   <Header />
 
+  <!-- Botão para voltar para o dashboard -->
   <v-card class="mx-auto mt-10" max-width="800" elevation="10" color="white">
     <v-container>
       <router-link to="/dashboard">
@@ -11,10 +12,11 @@
 
       <h1 class="text-center mb-4">Alunos</h1>
 
+      <!-- Campo para buscar aluno -->
       <v-form ref="form" @submit.prevent="handleRegistration">
         <v-row class="text-center">
           <v-text-field
-            v-model="buscarStudent"
+            v-model="searchStudent"
             label="Digite o nome do aluno"
             placeholder="Digite o nome do aluno"
             type="text"
@@ -48,6 +50,7 @@
             </v-col>
           </v-row>
         </v-list-item>
+        <!-- Busca aluno na API -->
         <v-list-item v-for="(student, index) in displayedStudents" :key="index">
           <v-row align="center" justify="center">
             <v-col cols="2">
@@ -73,7 +76,7 @@
         </v-list-item>
       </v-list>
 
-      <!-- Paginação -->
+      <!-- Paginação no máximo 4 alunos por página -->
       <v-pagination
         v-model="currentPage"
         :length="Math.ceil(filteredStudents.length / itemsPerPage)"
@@ -92,7 +95,7 @@ export default {
   },
   data() {
     return {
-      buscarStudent: "",
+      searchStudent: "",
       students: [],
       currentPage: 1,
       itemsPerPage: 4,
@@ -109,19 +112,19 @@ export default {
   },
   methods: {
     montarTreino(id) {
-      this.$router.push({ name: "cadastro-de-treino", params: { id } });
+      this.$router.push({ name: "cadastro-de-treino", params: { id } }); // Envia os dados para a próxima página
     },
-    verTreino(id, name) {
+    verTreino(id, name) { // Envia os dados para a próxima página
       localStorage.setItem("studentSelectedName", name);
       this.studentName = name;
       this.$router.push(`visualizacao-de-treino/${id}/${name}`);
     },
   },
   computed: {
-    // Filtra os alunos com base no valor de buscarStudent
+    // Filtra os alunos com base no valor do searchStudent
     filteredStudents() {
       return this.students.filter((student) =>
-        student.name.toLowerCase().includes(this.buscarStudent.toLowerCase())
+        student.name.toLowerCase().includes(this.searchStudent.toLowerCase())
       );
     },
     // Retorna apenas os alunos filtrados que estão na página atual
