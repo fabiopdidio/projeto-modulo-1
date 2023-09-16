@@ -134,7 +134,7 @@ export default {
           console.error("Erro ao buscar os dados do treino:", error);
         });
     },
-    markExercise(workoutId, dayOfWeek) {
+    markExercise(workoutId, dayOfWeek) { // Conclusao do exercicio ao ser marcado
       const requestBody = {
         workout_id: workoutId,
         student_id: this.userInfo.id,
