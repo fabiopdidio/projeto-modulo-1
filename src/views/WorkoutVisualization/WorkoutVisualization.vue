@@ -26,6 +26,7 @@
             ></v-img>
           </v-col>
 
+          <!-- Mostra o nome do aluno pelas rotas -->
           <v-col cols="auto">
             <h2 class="mt-3">Treinos - {{ this.$route.params.name }}</h2>
           </v-col>
@@ -33,24 +34,31 @@
 
         <hr class="mt-5 ml-4 mr-4" />
 
-        <h2 class="mt-4 ml-6">Hoje</h2>
+        <!-- Ao lado de hoje aparece o dia atual-->
+        <h3 class="mt-4 ml-6 mb-4">Hoje - {{ currentDay }}</h3>
 
+        <!--Treino do dia baseado no dia do sistema do usuario-->
         <p
           class="mt-2 ml-5"
-          v-for="(exercise, index) in exerciseDescriptions"
+          v-for="(exercise, index) in todayWorkout"
           :key="index"
         >
           <input type="checkbox" />
-          {{ exercise }} | {{ weights[index] }} kg |
-          {{ repetitions[index] }} repetições | {{ breakTimes[index] }} min de
-          intervalo
+          {{ exercise.exercise_description }} | {{ exercise.weight }} kg |
+          {{ exercise.repetitions }} repetições | {{ exercise.break_time }} min
+          de intervalo
         </p>
 
+        <!-- Demais treinos aparecem ao clicar no dia correspondente-->
         <v-row class="mt-2">
           <v-col cols="auto" v-for="(day, index) in workoutDays" :key="index">
             <v-btn
               @click="selectDay(day)"
-              :color="selectedDay === day ? 'blue' : 'black'"
+              :color="
+                selectedDay.toLowerCase() === day.toLowerCase()
+                  ? 'blue'
+                  : 'black'
+              "
               size="small"
               class="ml-4 mb-4"
             >
@@ -59,17 +67,20 @@
           </v-col>
         </v-row>
 
-        <p v-if="selectedDay" class="mt-4 ml-4 mb-4">
+        <h4 v-if="selectedDay" class="mt-4 ml-4 mb-4">
           {{ `Treino de: ${selectedDay}` }}
-        </p>
-        
-        <div v-if="selectedWorkout[selectedDay]" class="ml-5">
-          <p v-for="(exercise, index) in selectedWorkout[selectedDay]" :key="index">
-            <input type="checkbox" />
-            {{ exercise.exercise_description }} | {{ exercise.weight }} kg |
-            {{ exercise.repetitions }} repetições | {{ exercise.break_time }} min de intervalo
-          </p>
+        </h4>
 
+        <div v-if="selectedWorkout[selectedDay]" class="ml-5">
+          <p
+            v-for="(exercise, index) in selectedWorkout[selectedDay]"
+            :key="index"
+          >
+            <input type="checkbox" class="mb-4" />
+            {{ exercise.exercise_description }} | {{ exercise.weight }} kg |
+            {{ exercise.repetitions }} repetições |
+            {{ exercise.break_time }} min de intervalo
+          </p>
         </div>
       </v-container>
     </v-card>
@@ -98,31 +109,10 @@ export default {
         "Sábado",
         "Domingo",
       ],
-      workoutData: {},
+      workoutData: [],
+      todayWorkout: [],
+      currentDay: "",
     };
-  },
-  computed: {
-    exerciseDescriptions() {
-      if (this.workoutData && this.workoutData.length > 0) {
-        return this.workoutData.map((item) => item.exercise_description);
-      }
-    },
-    repetitions() {
-      if (this.workoutData && this.workoutData.length > 0) {
-        return this.workoutData.map((item) => item.repetitions);
-      }
-    },
-    weights() {
-      if (this.workoutData && this.workoutData.length > 0) {
-        return this.workoutData.map((item) => item.weight);
-      }
-    },
-    breakTimes() {
-      if (this.workoutData && this.workoutData.length > 0) {
-        return this.workoutData.map((item) => item.break_time);
-      }
-      
-    },
   },
   mounted() {
     this.fetchWorkoutData();
@@ -132,7 +122,13 @@ export default {
       axios
         .get(`http://localhost:3000/workouts?student_id=${this.student_id}`)
         .then((response) => {
-          this.workoutData = response.data.workouts;
+          this.workoutData = response.data.workouts; // Busca na API os treinos
+          const todayIndex = new Date().getDay(); // Dia atual
+          this.currentDay = this.workoutDays[todayIndex];
+          const today = this.workoutDays[todayIndex];
+          this.todayWorkout = this.workoutData.filter(
+            (data) => data.day.toLowerCase() === today.toLowerCase() // filtra de acordo com o dia
+          );
         })
         .catch((error) => {
           console.error("Erro ao buscar os dados do treino:", error);
@@ -146,7 +142,7 @@ export default {
       };
 
       axios
-        .post("http://localhost:3000/workouts/check", requestBody)
+        .post("http://localhost:3000/workouts/check", requestBody) // Ao ser concluido envia para a API
         .then(() => {})
         .catch((error) => {
           console.error("Erro ao marcar o exercício como concluído:", error);
@@ -154,19 +150,12 @@ export default {
     },
     selectDay(day) {
       this.selectedDay = day;
-      if (!this.selectedWorkout[day]) {
-        this.fetchWorkoutForDay(day);
-      }
+      this.filterWorkoutForDay(day);
     },
-    fetchWorkoutForDay(day) {
-      axios
-        .get(`http://localhost:3000/workouts?student_id=${this.student_id}&day=${day}`)
-        .then((response) => {
-          this.selectedWorkout[day] = response.data.workouts;
-        })
-        .catch((error) => {
-          console.error(`Erro ao buscar o treino de ${day}:`, error);
-        });
+    filterWorkoutForDay(day) {
+      this.selectedWorkout[day] = this.workoutData.filter(
+        (data) => data.day.toLowerCase() === day.toLowerCase()
+      );
     },
   },
 };
